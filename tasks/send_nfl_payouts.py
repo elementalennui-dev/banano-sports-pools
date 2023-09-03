@@ -17,7 +17,7 @@ my_account = Wallet(rpc, seed=SEED, index=0)
 print(my_account.get_address())
 
 #receive funds
-my_account.receive_all()
+my_account.receive_all(threshold=0)
 
 #get balance of self
 print(my_account.get_balance())
