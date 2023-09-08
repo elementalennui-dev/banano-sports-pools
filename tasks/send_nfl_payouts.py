@@ -95,7 +95,7 @@ full.loc[(full.score2 > full.score1) & (full["betting_team"] == full.team1) & (f
 full.loc[(full.score1 > full.score2) & (full["betting_team"] == full.team2) & (full.winning_pool == 0), "is_refund"] = True
 
 # transactions to send
-transactions = full.loc[(full.is_winner) | (full.is_refund) | (full.is_tie), ["nfl_week", "game_id", "ban_address", "bet_amount", "betting_team", "winning_pool", "losing_pool", "is_winner", "is_refund", "is_tie"]]
+transactions = full.loc[(full.is_winner) | (full.is_refund) | (full.is_tie), ["nfl_season", "nfl_week", "game_id", "ban_address", "bet_amount", "betting_team", "winning_pool", "losing_pool", "is_winner", "is_refund", "is_tie"]]
 
 # round to 2 decimal places
 transactions["percent_of_pool"] = transactions.bet_amount / transactions.winning_pool
@@ -118,6 +118,9 @@ for indx, row in transactions.iterrows():
 
 # store blocks
 transactions["block"] = blocks
+
+# match db columns
+transactions.rename(columns={"bet_amount": "total_bet"}, inplace=True)
 
 # save outputs
 if len(transactions) > 0:
