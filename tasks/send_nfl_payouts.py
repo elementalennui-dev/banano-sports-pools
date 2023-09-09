@@ -59,9 +59,14 @@ payments = pd.read_sql(f"select nfl_season, nfl_week, game_id, betting_team, ban
 full = pd.merge(bets_agg, games, on=["nfl_season", "nfl_week", "game_id"])
 full = pd.merge(full, payments, on=["nfl_season", "nfl_week", "game_id", "betting_team", "ban_address"], how="left")
 
-# null blocks, only payout completed games
-full = full.loc[(pd.isnull(full.block)) & (full.date < datetime.datetime.now(pytz.timezone("US/Eastern")))]
+# remove any already paid out games for that week
+paid_games = full.loc[pd.notnull(full.block), "game_id"].unique()
+print(paid_games)
+full = full.loc[~full.game_id.isin(paid_games)]
 full.drop(columns="block", inplace=True)
+
+# only payout completed games
+full = full.loc[full.date < datetime.datetime.now(pytz.timezone("US/Eastern"))]
 
 # determine winners/refunds
 full["is_winner"] = False
@@ -112,7 +117,9 @@ blocks = []
 
 # use bananopie to send the transaction
 for indx, row in transactions.iterrows():
-    resp = my_account.send(row["ban_address"], row["payout"])
+    payout = "{:.2f}".format(row["payout"])
+    print(payout)
+    resp = my_account.send(row["ban_address"], payout)
     print(resp)
     blocks.append(resp["hash"])
 
