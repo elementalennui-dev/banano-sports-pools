@@ -1,7 +1,7 @@
 //theme set
 var theme = "yeti";
 var ban_address_verified = "";
-var data = [];
+var game_data = [];
 const sprtsAddress = "ban_3sprts3a8hzysquk4mcy4ct4f6izp1mxtbnybiyrriprtjrn9da9cbd859qf";
 
 if (window.name) {
@@ -92,10 +92,6 @@ $(document).ready(function() {
         alert("Address Copied!");
     });
 
-    $("#confirm_deposit").on("click", function(x) {
-        confirmDeposit();
-    });
-
     //highlight games
     $("#rec_games").on("change", function(x) {
         recommendGames();
@@ -105,7 +101,7 @@ $(document).ready(function() {
     $("#next_modal_page").on("click", function(x) {
 
         let game_id = $("#game_id_splt").text();
-        let game = nfl_data.filter(x => x.game_id == game_id)[0]
+        let game = game_data.filter(x => x.game_id == game_id)[0]
 
         // checks for quantity, less than 100, and before kickoff
         if (($("#quantity").val() != "") && ($("#quantity").val() != null)) {
@@ -305,13 +301,14 @@ function getGames(sport) {
         contentType: "application/json; charset=utf-8",
         success: function(data) {
             // console.log(data);
+            game_data = data;
 
             let team_num = 0;
             let row = "";
             let finished_row = false;
             $("#games").empty();
 
-            data.forEach(function (x) {
+            game_data.forEach(function (x) {
                 if (team_num % 3 == 0) {
                     $("#games").append(row);
                     finished_row = true;
@@ -465,7 +462,7 @@ function getGames(sport) {
             $("#games").show();
 
             // countdown timer
-            data.forEach(function(x) {
+            game_data.forEach(function(x) {
                 setInterval(function() { countdownTimer(x.game_id, x.gametime); }, 1000);
             });
 
@@ -483,7 +480,7 @@ function getGames(sport) {
                     let team1_splt = game_id_btn.split("-")[2];
                     let team2_splt = game_id_btn.split("-")[3];
 
-                    let game = nfl_data.filter(x => x.game_id == game_id_splt)[0];
+                    let game = game_data.filter(x => x.game_id == game_id_splt)[0];
 
                     $("#game_id_splt").text(game_id_splt);
                     $("#teams_splt").text(`${team1_splt} vs ${team2_splt}`);

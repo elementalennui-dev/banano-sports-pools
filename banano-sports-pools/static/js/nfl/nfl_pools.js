@@ -16,6 +16,10 @@ $(document).ready(function() {
         }, 2000);
     })
 
+    $("#confirm_deposit").on("click", function(x) {
+        confirmDeposit("nfl");
+    });
+
     // inits on page load
     getCurrentWeek("nfl");
 });

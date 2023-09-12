@@ -2,7 +2,7 @@
 $(document).ready(function() {
 
     // load the main page of active deposits
-    $("#week_inp, #season_inp").on("change", function(x) {
+    $("#week_inp, #season_inp").on("change", function (x) {
         $("#games").hide();
         $(".progress-bar").animate({
             width: "0%",
@@ -14,7 +14,11 @@ $(document).ready(function() {
         $(".progress-bar").animate({
             width: "100%",
         }, 2000);
-    })
+    });
+
+    $("#confirm_deposit").on("click", function(x) {
+        confirmDeposit("rwc");
+    });
 
     // inits on page load
     getCurrentWeek("rwc");
