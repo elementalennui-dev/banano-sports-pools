@@ -13,12 +13,15 @@ class MakeDepositHelper():
         self.databaseHelper = DataBaseHelper()
 
     #########################################################################
-    ########################### NFL #########################################
+    ########################### DEPOSITS ####################################
     #########################################################################
-    def confirmNFLDeposit(self, ban_address, game_id, team_num, team_abbr, deposit_amount, nfl_week, nfl_season):
-        nfl_data = self.databaseHelper.getNFLGameOdds(nfl_week, nfl_season)
+    def confirmDeposit(self, ban_address, sport, game_id, team_num, team_abbr, deposit_amount, table, week_col, season_col, week_inp, season_inp):
+        if sport == "nfl":
+            data = self.databaseHelper.nfl.getNFLGameOdds(week_inp, season_inp)
+        else:
+            data = self.databaseHelper.rwc.getRWCGameOdds(week_inp, season_inp)
 
-        game = nfl_data.loc[nfl_data.game_id == game_id]
+        game = data.loc[data.game_id == game_id]
         game_time = game.reset_index().gametime[0]
 
         now = datetime.datetime.now(pytz.timezone("US/Eastern"))
@@ -65,12 +68,12 @@ class MakeDepositHelper():
                     "betting_team": team_abbr,
                     "date": df.date[0].strftime('%m/%d/%Y %H:%M:%S'),
                     "timestamp": df.timestamp[0],
-                    "nfl_week": nfl_week,
-                    "nfl_season": nfl_season,
+                    week_col: week_inp,
+                    season_col: season_inp,
                     "is_active": True}
 
             insert_df = pd.DataFrame([row])
-            self.databaseHelper.writeDeposit(insert_df, "nfl_bets")
+            self.databaseHelper.writeDeposit(insert_df, table)
 
             return ({"confirmed": True, "message": f"Deposit Confirmed! Received {df.amount[0]} BAN at {df.date[0].strftime('%m/%d/%Y %H:%M:%S')} ET on {team_abbr} to win. Block: {df.hash[0]}. <a target='_blank' href='https://creeper.banano.cc/hash/{df.hash[0]}'>View Block on Creeper</a>"})
         else:

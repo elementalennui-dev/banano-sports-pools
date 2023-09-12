@@ -20,7 +20,7 @@
     <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
 
     <script src="../../../static/js/pools.js"></script>
-    <script src="../../../static/js/nfl/nfl_pools.js"></script>
+    <script src="../../../static/js/rwc/rwc_pools.js"></script>
 
 </head>
 
@@ -52,16 +52,16 @@
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/sports/html/nfl/nfl_pools">NFL Pools</a>
+                    <a class="nav-link" href="/sports/html/rwc/rwc_pools">RWC Pools</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/sports/html/nfl/nfl_history">NFL History</a>
+                    <a class="nav-link" href="/sports/html/rwc/rwc_history">RWC History</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/sports/html/nfl/nfl_payouts">NFL Payouts</a>
+                    <a class="nav-link" href="/sports/html/rwc/rwc_payouts">RWC Payouts</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/sports/html/nfl/nfl_leaderboards">NFL Stats</a>
+                    <a class="nav-link" href="/sports/html/rwc/rwc_leaderboards">RWC Stats</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/roadmap">Roadmap</a>
@@ -72,7 +72,7 @@
     <div class="container-fluid jumbotron">
         <div class="row">
             <div class="col-md-12 text-center">
-                <h1>Banano Sports Pools - NFL</h1>
+                <h1>Banano Sports Pools - Rugby World Cup</h1>
             </div>
         </div>
         <div class="row">
@@ -120,32 +120,10 @@
             </div>
             <div class="col-md-2 my-auto">
                 <div style="zoom: 1.1;">
-                    <label class="col-form-label" for="week_inp">NFL Week:</label>
+                    <label class="col-form-label" for="week_inp">RWC Round:</label>
                     <div style="clear: both;"></div>
                     <select id="week_inp">
-                        <option value="1" selected>Week 1</option>
-                        <option value="2">Week 2</option>
-                        <option value="3">Week 3</option>
-                        <option value="4">Week 4</option>
-                        <option value="5">Week 5</option>
-                        <option value="6">Week 6</option>
-                        <option value="7">Week 7</option>
-                        <option value="8">Week 8</option>
-                        <option value="9">Week 9</option>
-                        <option value="10">Week 10</option>
-                        <option value="11">Week 11</option>
-                        <option value="12">Week 12</option>
-                        <option value="13">Week 13</option>
-                        <option value="14">Week 14</option>
-                        <option value="15">Week 15</option>
-                        <option value="16">Week 16</option>
-                        <option value="17">Week 17</option>
-                        <option value="18">Week 18</option>
-                        <option value="19">Wild Card</option>
-                        <option value="20">Division</option>
-                        <option value="21" >Championship</option>
-                        <!-- <option value="22">Pro Bowl</option> -->
-                        <option value="23">Super Bowl</option>
+                        <option value="group" selected>Group</option>
                     </select>
                 </div>
             </div>
@@ -158,6 +136,12 @@
             <div class="col-md-4 my-auto">
                 <button type="button" class="btn btn-secondary" id="changeBanAddress">Change BAN Address</button>
                 <button type="button" class="btn btn-primary" onClick="window.location.reload();">Refresh Page</button>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <p>Disclaimer: Win Probabilities for the Rugby World Cup are not provided by the data vendor used by these pools. All fixtures are defaulted to +100, 1/1, 2.000, 50% odds.</p>
             </div>
         </div>
     </div>
@@ -328,7 +312,7 @@
                             <div class="col-md-12" id="deposit_confirmation">
                                 <h2>Here is your confirmed deposit, you may now close this pop-up. Feel free to screenshot this receipt for proof.</h2>
                                 <h3> Your deposit should now also be seen on the
-                                    <a href="/sports/html/nfl/nfl_history" , target="_blank">History</a> page. Refresh this page to see the updated pool.</h3>
+                                    <a href="/sports/html/rwc/rwc_history" , target="_blank">History</a> page. Refresh this page to see the updated pool.</h3>
                                 <br>
                             </div>
                         </div>
@@ -344,7 +328,7 @@
     <div class="container-fluid" id="progress_container">
         <div class="row">
             <div class="col-md-12 text-center">
-                <h3>Grabbing NFL Games and Pool Data...</h3>
+                <h3>Grabbing RWC Games and Pool Data...</h3>
             </div>
         </div>
         <div class="row">

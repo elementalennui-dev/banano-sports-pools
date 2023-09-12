@@ -11,8 +11,8 @@
     <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/yeti/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/style.css">
-    <link rel="icon" type="image/ico" href="../static/assets/favicon.ico">
+    <link rel="stylesheet" href="../../../static/css/style.css">
+    <link rel="icon" type="image/ico" href="../../../static/assets/favicon.ico">
 
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -30,13 +30,14 @@
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js"></script>
 
-    <script src="../static/js/nfl/nfl_payouts.js"></script>
+    <script src="../../../static/js/payouts.js"></script>
+    <script src="../../../static/js/nfl/nfl_payouts.js"></script>
 
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="/"><img src="../static/assets/banano.png" height="50px" width="50px"></a>
+        <a class="navbar-brand" href="/"><img src="../../../static/assets/banano.png" height="50px" width="50px"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -62,16 +63,16 @@
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/nfl/nfl_pools">NFL Pools</a>
+                    <a class="nav-link" href="/sports/html/nfl/nfl_pools">NFL Pools</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/nfl/nfl_history">NFL History</a>
+                    <a class="nav-link" href="/sports/html/nfl/nfl_history">NFL History</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/nfl/nfl_payouts">NFL Payouts</a>
+                    <a class="nav-link" href="/sports/html/nfl/nfl_payouts">NFL Payouts</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/nfl/nfl_leaderboards">NFL Stats</a>
+                    <a class="nav-link" href="/sports/html/nfl/nfl_leaderboards">NFL Stats</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/roadmap">Roadmap</a>
@@ -95,16 +96,16 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="d-flex flex-column">
-                                <label class="col-form-label" for="nfl_season">Season:</label>
+                                <label class="col-form-label" for="season_inp">Season:</label>
                                 <div style="clear: both;"></div>
-                                <select id="nfl_season">
+                                <select id="season_inp">
                                     <option value="2022">2022/23</option>
                                     <option value="2023" selected>2023/24</option>
                                 </select>
                             </div>
                             <div class="d-flex flex-column">
-                                <label class="col-form-label" for="nfl_week">NFL Week</label>
-                                <select id="nfl_week">
+                                <label class="col-form-label" for="week_inp">NFL Week</label>
+                                <select id="week_inp">
                                 <option value="1" selected>Week 1</option>
                                 <option value="2">Week 2</option>
                                 <option value="3">Week 3</option>

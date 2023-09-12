@@ -1,9 +1,8 @@
 from flask import Flask, render_template, redirect, request, jsonify, make_response
 from flask_talisman import Talisman
 import json
-import datetime
-import pytz
 import os
+from fractions import Fraction
 import pandas as pd
 from validations import Validations
 from makeDepositHelper import MakeDepositHelper
@@ -24,6 +23,26 @@ makeDepositHelper = MakeDepositHelper()
 validations = Validations()
 databaseHelper = DataBaseHelper()
 
+# helper funcs
+def odds_to_decimal(odds):
+    if "+" in odds:
+        rtn = (int(odds.strip("+"))/100) + 1
+    else:
+        rtn = (100/int(odds.strip("-"))) + 1
+
+    rtn = '{0:.3f}'.format(rtn)
+    return(rtn)
+
+def odds_to_frac(odds):
+    if "+" in odds:
+        rtn = (int(odds.strip("+"))/100)
+    else:
+        rtn = (100/int(odds.strip("-")))
+
+    rtn = Fraction(rtn).limit_denominator(100)
+    rtn = str(rtn.numerator) + "/" + str(rtn.denominator)
+    return rtn
+
 # Route to render index.html template using data from Mongo
 @app.route("/")
 def home():
@@ -36,28 +55,13 @@ def roadmap():
     return render_template("roadmap.html")
 
 ###################################
-############### NFL ###############
+############ Web Pages#############
 ###################################
 
-@app.route("/nfl/nfl_pools")
-def nfl_pools():
+@app.route("/sports/html/<sport>/<page>")
+def render_webpage(sport, page):
     # Return template and data
-    return render_template("nfl/nfl_pools.html")
-
-@app.route("/nfl/nfl_history")
-def nfl_history():
-    # Return template and data
-    return render_template("nfl/nfl_history.html")
-
-@app.route("/nfl/nfl_payouts")
-def nfl_payouts():
-    # Return template and data
-    return render_template("nfl/nfl_payouts.html")
-
-@app.route("/nfl/nfl_leaderboards")
-def nfl_leaderboards():
-    # Return template and data
-    return render_template("nfl/nfl_leaderboards.html")
+    return render_template(f"{sport}/{page}.html")
 
 #######################################################
 ############# HELPER FUNCTIONS ########################
@@ -72,21 +76,31 @@ def verify_ban():
     return(jsonify({"ban_address":ban_address, "verified":is_valid}))
 
 #######################################################
-#################### NFL ##############################
+#################### API ##############################
 #######################################################
 
-@app.route("/nfl/get_nfl_current_week", methods=["POST"])
-def get_nfl_current_week():
+@app.route("/sports/api/get_current_week/<sport>", methods=["POST"])
+def get_current_week(sport):
     content = request.json["data"]
-    nfl_season = int(content["nfl_season"])
+    season_inp = int(content["season_inp"])
 
-    current_week = databaseHelper.getCurrentNFLWeek(nfl_season)
+    # get current week
+    if sport == "nfl":
+        current_week = databaseHelper.nfl.getCurrentNFLWeek(season_inp)
+    else:
+        current_week = databaseHelper.rwc.getCurrentRWCWeek(season_inp)
+
     return(jsonify({"current_week": current_week}))
 
-@app.route("/nfl/get_nfl_data/<nfl_week>/<nfl_season>", methods=["GET"])
-def get_nfl_data(nfl_week, nfl_season):
-    df = databaseHelper.getNFLGameOdds(nfl_week, nfl_season)
-    deposits = databaseHelper.getNFLDepositDataAggregates(nfl_week, nfl_season)
+@app.route("/sports/api/get_game_data/<sport>/<week_inp>/<season_inp>", methods=["GET"])
+def get_game_data(sport, week_inp, season_inp):
+    # get data for sport
+    if sport == "nfl":
+        df = databaseHelper.nfl.getNFLGameOdds(week_inp, season_inp)
+        deposits = databaseHelper.nfl.getNFLDepositDataAggregates(week_inp, season_inp)
+    else:
+        df = databaseHelper.rwc.getRWCGameOdds(week_inp, season_inp)
+        deposits = databaseHelper.rwc.getRWCDepositDataAggregates(week_inp, season_inp)
 
     # merge deposits
     df = pd.merge(df, deposits, on="game_id", how="left")
@@ -96,6 +110,12 @@ def get_nfl_data(nfl_week, nfl_season):
     df["team1_rec"] = (df.team2_perc - df.team1_perc) - (df.team2_odds_wp - df.team1_odds_wp) >= 0
     df["team2_rec"] = (df.team1_perc - df.team2_perc) - (df.team1_odds_wp - df.team2_odds_wp) >= 0
 
+    # get decimal & frac odds
+    df["team2_odds_dec"] = df.team2_odds.apply(odds_to_decimal)
+    df["team1_odds_dec"] = df.team1_odds.apply(odds_to_decimal)
+    df["team2_odds_frac"] = df.team2_odds.apply(odds_to_frac)
+    df["team1_odds_frac"] = df.team1_odds.apply(odds_to_frac)
+
     # rearrange so started games are at the bottom
     df1 = df.loc[df.started].reset_index(drop=True)
     df2 = df.loc[~df.started].reset_index(drop=True)
@@ -103,48 +123,65 @@ def get_nfl_data(nfl_week, nfl_season):
 
     return(jsonify(json.loads(df.to_json(orient="records"))))
 
-@app.route("/nfl/get_nfl_history", methods=["POST"])
-def get_nfl_history():
+@app.route("/sports/api/get_history/<sport>", methods=["POST"])
+def get_history(sport):
     content = request.json["data"]
     min_ban = float(content["min_ban"])
     max_ban = float(content["max_ban"])
-    nfl_week = int(content["nfl_week"])
-    nfl_season = int(content["nfl_season"])
+    week_inp = content["week_inp"]
+    season_inp = int(content["season_inp"])
 
-    raw_deposits = databaseHelper.getNFLDepositData(nfl_week, nfl_season, min_ban, max_ban)
+    if sport == "nfl":
+        raw_deposits = databaseHelper.nfl.getNFLDepositData(week_inp, season_inp, min_ban, max_ban)
+    else:
+        raw_deposits = databaseHelper.rwc.getRWCDepositData(week_inp, season_inp, min_ban, max_ban)
+
     return(jsonify(json.loads(raw_deposits.to_json(orient="records"))))
 
-@app.route("/nfl/get_nfl_leaderboards", methods=["POST"])
-def get_nfl_leaderboards():
+@app.route("/sports/api/get_leaderboards/<sport>", methods=["POST"])
+def get_leaderboards(sport):
     content = request.json["data"]
     ban_address = content["ban_address"]
-    nfl_week = content["nfl_week"]
-    nfl_season = content["nfl_season"]
+    week_inp = content["week_inp"]
+    season_inp = content["season_inp"]
 
-    raw_stats = databaseHelper.getNFLWeekLeaderboards(nfl_week, nfl_season, ban_address)
+    if sport == "nfl":
+        raw_stats = databaseHelper.nfl.getNFLWeekLeaderboards(week_inp, season_inp, ban_address)
+    else:
+        raw_stats = databaseHelper.rwc.getRWCWeekLeaderboards(week_inp, season_inp, ban_address)
+
     return(jsonify(json.loads(raw_stats.to_json(orient="records"))))
 
-@app.route("/nfl/get_nfl_ban_addresses", methods=["POST"])
-def get_nfl_ban_addresses():
+@app.route("/sports/api/get_ban_addresses/<sport>", methods=["POST"])
+def get_ban_addresses(sport):
     content = request.json["data"]
-    nfl_week = content["nfl_week"]
-    nfl_season = content["nfl_season"]
-    raw_addresses = databaseHelper.getNFLBanAddresses(nfl_week, nfl_season)
+    week_inp = content["week_inp"]
+    season_inp = content["season_inp"]
+
+    if sport == "nfl":
+        raw_addresses = databaseHelper.nfl.getNFLBanAddresses(week_inp, season_inp)
+    else:
+        raw_addresses = databaseHelper.rwc.getRWCBanAddresses(week_inp, season_inp)
+
     return(jsonify(json.loads(raw_addresses.to_json(orient="records"))))
 
-@app.route("/nfl/get_nfl_payouts", methods=["POST"])
-def get_nfl_payouts():
+@app.route("/sports/api/get_payouts/<sport>", methods=["POST"])
+def get_payouts(sport):
     content = request.json["data"]
     min_ban = float(content["min_ban"])
     max_ban = float(content["max_ban"])
-    nfl_week = int(content["nfl_week"])
-    nfl_season = int(content["nfl_season"])
+    week_inp = content["week_inp"]
+    season_inp = int(content["season_inp"])
 
-    payouts = databaseHelper.getNFLPayouts(nfl_week, nfl_season, min_ban, max_ban)
+    if sport == "nfl":
+        payouts = databaseHelper.nfl.getNFLPayouts(week_inp, season_inp, min_ban, max_ban)
+    else:
+        payouts = databaseHelper.rwc.getRWCPayouts(week_inp, season_inp, min_ban, max_ban)
+
     return(jsonify(json.loads(payouts.to_json(orient="records"))))
 
-@app.route("/nfl/confirm_nfl_deposit", methods=["POST"])
-def confirm_nfl_deposit():
+@app.route("/sports/api/confirm_deposit/<sport>", methods=["POST"])
+def confirm_deposit(sport):
     content = request.json["data"]
     ban_address = content["ban_address"]
     team = content["team"]
@@ -152,10 +189,14 @@ def confirm_nfl_deposit():
     team_num = team.split("_")[0]
     game_id = content["game_id"]
     deposit_amount = float(content["amount"])
-    nfl_week = int(content["nfl_week"])
-    nfl_season = int(content["nfl_season"])
+    week_inp = content["week_inp"]
+    season_inp = int(content["season_inp"])
 
-    confirmed = makeDepositHelper.confirmNFLDeposit(ban_address, game_id, team_num, team_abbr, deposit_amount, nfl_week, nfl_season)
+    if sport == "nfl":
+        confirmed = makeDepositHelper.confirmDeposit(ban_address, "nfl", game_id, team_num, team_abbr, deposit_amount, "nfl_bets", "nfl_week", "nfl_season", week_inp, season_inp)
+    else:
+        confirmed = makeDepositHelper.confirmDeposit(ban_address, "rwc", game_id, team_num, team_abbr, deposit_amount, "rugby_world_cup_bets", "match_round", "season", week_inp, season_inp)
+
     return(jsonify(confirmed))
 
 #############################################################

@@ -9,7 +9,7 @@ $(document).ready(function() {
         }, 0);
 
         $("#progress_container").show();
-        getGames("nfl");
+        getGames("rwc");
         // Set the width to animate the progress bar, along with time duration in milliseconds
         $(".progress-bar").animate({
             width: "100%",
@@ -17,5 +17,5 @@ $(document).ready(function() {
     })
 
     // inits on page load
-    getCurrentWeek("nfl");
+    getCurrentWeek("rwc");
 });

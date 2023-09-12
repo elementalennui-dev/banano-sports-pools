@@ -2,8 +2,8 @@ $(document).ready(function() {
 
     $("#filter").click(function() {
         // alert("button clicked!");
-        getPayouts("nfl", "nfl_week");
+        getPayouts("rwc", "match_round");
     });
 
-    getCurrentWeek("nfl", "nfl_week");
+    getCurrentWeek("rwc", "match_round");
 });
