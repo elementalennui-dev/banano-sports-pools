@@ -1,10 +1,9 @@
 import pandas as pd
 import datetime
 import pytz
-import requests
-import numpy as np
+import time
 from bananopie import RPC, Wallet
-from sqlalchemy import create_engine, inspect
+from sqlalchemy import create_engine
 from config import POSTGRES_URL, SEED
 
 # rpc
@@ -17,10 +16,22 @@ my_account = Wallet(rpc, seed=SEED, index=0)
 print(my_account.get_address())
 
 #receive funds
-my_account.receive_all(threshold=0)
+receive_more = True
+while receive_more:
+    # receive and check balance
+    my_account.receive_all()
+    bal = my_account.get_balance()
 
-#get balance of self
-print(my_account.get_balance())
+    # pending transactions
+    pend_dec = float(bal["pending_decimal"])
+    rec_dec = float(bal["receivable_decimal"])
+
+    # loop until no more transactions to receive
+    if (pend_dec == 0) & (rec_dec == 0):
+        receive_more = False
+        print(bal)
+    else:
+        time.sleep(2) # sleep before receiving again
 
 # db conn
 engine = create_engine(POSTGRES_URL)
@@ -118,7 +129,8 @@ blocks = []
 # use bananopie to send the transaction
 for indx, row in transactions.iterrows():
     payout = "{:.2f}".format(row["payout"])
-    print(payout)
+    print(row["ban_address"], payout, type(row["payout"]))
+
     resp = my_account.send(row["ban_address"], payout)
     print(resp)
     blocks.append(resp["hash"])
@@ -137,3 +149,4 @@ else:
 
 # close db
 conn.close()
+engine.dispose()
