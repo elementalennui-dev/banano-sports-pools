@@ -7,10 +7,10 @@ from sqlalchemy import create_engine
 from config import POSTGRES_URL, SEED
 
 # rpc
-rpc = RPC("https://booster.dev-ptera.com/banano-rpc")
+rpc = RPC("https://kaliumapi.appditto.com/api")
 
 # connect to account
-my_account = Wallet(rpc, seed=SEED, index=0)
+my_account = Wallet(rpc, seed=SEED, index=0, try_work=True)
 
 #get address of self
 print(my_account.get_address())
@@ -41,36 +41,37 @@ conn = engine.connect()
 
 # get season
 now = datetime.datetime.now()
-nfl_season = now.year if now.month >= 3 else now.year - 1
+season = now.year
 
-# get nfl week
+# get rwc week
 query = f"""
         select
-            coalesce(min(nfl_week), 23)
+            coalesce(min(match_round), 'group')
         from
-            nfl_games ng
+            rugby_world_cup_games rwc
         where
-            ng.nfl_season = {nfl_season}
-            and ng."date" > (NOW() - INTERVAL '1 DAY');"""
+            rwc.season = {season}
+            and rwc."date" > (NOW() - INTERVAL '1 DAY');"""
 
-nfl_week = list(conn.execute(query))[0][0]
+match_round = list(conn.execute(query))[0][0]
+match_round = f"'{match_round}'"
 
 # get games
-games = pd.read_sql(f"select nfl_season, nfl_week, game_id, date, team1, team2, score1, score2 from nfl_games where nfl_season = {nfl_season} and nfl_week = {nfl_week}", con=conn)
+games = pd.read_sql(f"select season, match_round, game_id, date, team1, team2, score1, score2 from rugby_world_cup_games where season = {season} and match_round = {match_round}", con=conn)
 games["date"] = games["date"].dt.tz_localize("UTC").dt.tz_convert('US/Eastern')
 
 # get deposits
-bets = pd.read_sql(f"select * from nfl_bets where nfl_season = {nfl_season} and nfl_week = {nfl_week}", con=conn)
-bets_agg = bets.groupby(["nfl_season", "nfl_week", "game_id", "betting_team", "ban_address"], as_index=False)["bet_amount"].sum()
+bets = pd.read_sql(f"select * from rugby_world_cup_bets where season = {season} and match_round = {match_round}", con=conn)
+bets_agg = bets.groupby(["season", "match_round", "game_id", "betting_team", "ban_address"], as_index=False)["bet_amount"].sum()
 if "bet_amount" not in bets_agg.columns:
     bets_agg["bet_amount"] = None
 
 # get payments to avoid double sending
-payments = pd.read_sql(f"select nfl_season, nfl_week, game_id, betting_team, ban_address, block from nfl_bets_payouts where nfl_season = {nfl_season} and nfl_week = {nfl_week}", con=conn)
+payments = pd.read_sql(f"select season, match_round, game_id, betting_team, ban_address, block from rugby_world_cup_bets_payouts where season = {season} and match_round = {match_round}", con=conn)
 
 # join bets/games. Determine payments
-full = pd.merge(bets_agg, games, on=["nfl_season", "nfl_week", "game_id"])
-full = pd.merge(full, payments, on=["nfl_season", "nfl_week", "game_id", "betting_team", "ban_address"], how="left")
+full = pd.merge(bets_agg, games, on=["season", "match_round", "game_id"])
+full = pd.merge(full, payments, on=["season", "match_round", "game_id", "betting_team", "ban_address"], how="left")
 
 # remove any already paid out games for that week
 paid_games = full.loc[pd.notnull(full.block), "game_id"].unique()
@@ -113,7 +114,7 @@ full.loc[(full.score2 > full.score1) & (full["betting_team"] == full.team1) & (f
 full.loc[(full.score1 > full.score2) & (full["betting_team"] == full.team2) & (full.winning_pool == 0), "is_refund"] = True
 
 # transactions to send
-transactions = full.loc[(full.is_winner) | (full.is_refund) | (full.is_tie), ["nfl_season", "nfl_week", "game_id", "ban_address", "bet_amount", "betting_team", "winning_pool", "losing_pool", "is_winner", "is_refund", "is_tie"]]
+transactions = full.loc[(full.is_winner) | (full.is_refund) | (full.is_tie), ["season", "match_round", "game_id", "ban_address", "bet_amount", "betting_team", "winning_pool", "losing_pool", "is_winner", "is_refund", "is_tie"]]
 
 # round to 2 decimal places
 transactions["percent_of_pool"] = transactions.bet_amount / transactions.winning_pool
@@ -146,7 +147,7 @@ transactions.rename(columns={"bet_amount": "total_bet"}, inplace=True)
 
 # save outputs
 if len(transactions) > 0:
-    transactions.to_sql("nfl_bets_payouts", con=engine, index=False, if_exists="append", method="multi")
+    transactions.to_sql("rugby_world_cup_bets_payouts", con=engine, index=False, if_exists="append", method="multi")
 else:
     print("No transactions")
 
