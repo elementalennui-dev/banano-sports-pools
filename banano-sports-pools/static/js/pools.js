@@ -167,7 +167,7 @@ function getCurrentWeek(sport) {
             getGames(sport);
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui#4641 on Discord.");
+            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui on Discord.");
         }
     });
 }
@@ -240,7 +240,7 @@ function confirmDeposit(sport) {
 
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui#4641 on Discord.");
+            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui on Discord.");
             $("#confirm_deposit").prop("disabled", false);
         }
     });
@@ -284,7 +284,7 @@ function validateBanAddress() {
 
         },
         error: function(textStatus, errorThrown) {
-            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui#4641 on Discord.");
+            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui on Discord.");
         }
     });
 }
@@ -497,7 +497,7 @@ function getGames(sport) {
         },
         error: function(textStatus, errorThrown) {
             console.log("FAILED to get data");
-            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui#4641 on Discord.");
+            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui on Discord.");
         }
     });
 }

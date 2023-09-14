@@ -60,7 +60,7 @@ function getCurrentWeek(sport, week_col) {
             getDepositHistory(sport, week_col);
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui#4641 on Discord.");
+            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui on Discord.");
         }
     });
 }
@@ -92,7 +92,7 @@ function getDepositHistory(sport, week_col) {
             renderTable(returnedData, week_col);
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui#4641 on Discord.");
+            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui on Discord.");
         }
     });
 

@@ -61,7 +61,7 @@ function getCurrentWeek(sport, week_col) {
             getLeaderboards(sport, week_col);
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui#4641 on Discord.");
+            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui on Discord.");
         }
     });
 }
@@ -92,7 +92,7 @@ function getBanAddresses(sport) {
 
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui#4641 on Discord.");
+            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui on Discord.");
         }
     });
 }
@@ -124,7 +124,7 @@ function getLeaderboards(sport, week_col) {
             makeLeaderboardPiePlot(returnedData, ban_address);
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui#4641 on Discord.");
+            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui on Discord.");
         }
     });
 
