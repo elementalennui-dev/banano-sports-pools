@@ -1,2 +1,2 @@
 #!/bin/sh
-sudo python -W ignore main.py
+sudo python3 -W ignore main.py
