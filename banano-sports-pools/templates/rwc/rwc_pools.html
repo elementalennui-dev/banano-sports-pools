@@ -19,6 +19,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
 
+    <script src="../../../static/js/tip.js"></script>
     <script src="../../../static/js/pools.js"></script>
     <script src="../../../static/js/rwc/rwc_pools.js"></script>
 
@@ -195,8 +196,8 @@
                                 <p>Sure, great, but what cool stuff have you added?</p>
                                 <p>AUTOMATION. Automation everywhere.</p>
                                 <ol>
-                                    <li>PAYMENTS ARE NOW AUTOMATIC and will go out daily at 12pm UTC. Shout-out to the <a href="https://github.com/jetstream0/bananopie", href="_target">BananoPie</a> library for helping make this lift possible.</li>
-                                    <li>Game results are also now automated! Every day at 11am UTC, all game outcomes should be updated automatically (e.g. final scores, schedule changes, etc)</li>
+                                    <li>PAYMENTS ARE NOW AUTOMATIC and will go out hourly on the 15. Shout-out to the <a href="https://github.com/jetstream0/bananopie", href="_target">BananoPie</a> library for helping make this lift possible.</li>
+                                    <li>Game results are also now automated! Every day on the hour, all game outcomes should be updated automatically (e.g. final scores, schedule changes, etc)</li>
                                     <li>When you navigate to the Pools page, the current week will be selected by default, automatically!</li>
                                     <li>I refactored the history for the NFL pools from 2022, and made NFL Season a filter on all pages.</li>
                                     <li>I added a couple of visualization to the stats/leaderboard pages. #DataViz</li>
@@ -341,14 +342,24 @@
     <div class="container-fluid" id="games" style="display:none">
     </div>
     <hr style="color:lightgray; border-width: 3px;">
-    <div class="col-md-12 jumbotron text-center">
-        <h5>What the fork is BANANO?</h5>
-        BANANO was forked in April 2018 from NANO. BANANO offers instant, feeless and rich in potassium 🍌 transactions, thanks to the fact that BANANO developers (several of them having being involved in NANO itself) ha v e kept big portions of the or code unchanged
-        to keep cross-chain compatibility between existing code libraries. However, they have fined-tuned some parameters, such as Proof of Work requirements and currency units. While the foc u s for now is on having an ongoing free a fair distribution,
-        BANANO is also experimenting with feature additions such as a privacy layer (Camo BANANO), on-chain messaging (MonkeyTalks) and more. In context of distribution, we aim t o use our meanwhile ready-to-strike infrastructur with easy-to-use mobile
-        wallets (Kalium) and tipbots on several major social media platforms to onboard normies and crypto-noobs who have no idea yet what a cryptocurrency is. We also might do IRL airdrops at some point. Of note, key here is to make the start with crypto
-        as easy as possible, use a fun attitude and gamification to get new users started without all the usual hassle, and then educate them to handle crypto in general in a responsible way.</p>
-        <a href="https://banano.cc/" target="_blank">Check out more about Banano and get a wallet address here!</a>
+    <div class="container-fluid">
+        <div class="row jumbotron">
+            <div class="col-md-10 text-center">
+                <h5>What the fork is BANANO?</h5>
+                <p>BANANO was forked in April 2018 from NANO. BANANO offers instant, feeless and rich in potassium 🍌 transactions, thanks to the fact that BANANO developers (several of them having being involved in NANO itself) have kept big portions of the original
+                    code unchanged to keep cross-chain compatibility between existing code libraries. However, they have fined-tuned some parameters, such as Proof of Work requirements and currency units. While the focus for now is on having an ongoing free and
+                    fair distribution, BANANO is also experimenting with feature additions such as a privacy layer (Camo BANANO), on-chain messaging (MonkeyTalks) and more. In context of distribution, we aim to use our meanwhile ready-to-strike infrastructure
+                    with easy-to-use mobile wallets (Kalium) and tipbots on several major social media platforms to onboard normies and crypto-noobs who have no idea yet what a cryptocurrency is. We also might do IRL airdrops at some point. Of note, key here
+                    is to make the start with crypto as easy as possible, use a fun attitude and gamification to get new users started without all the usual hassle, and then educate them to handle crypto in general in a responsible way.</p>
+                <a href="https://banano.cc/" target="_blank">Check out more about Banano and get a wallet address here!</a>
+            </div>
+            <div class="col-md-2 text-center align-items-center">
+                <div class="tip">
+                    <h5>Donations 🍌:</h5>
+                    <div id="tip_qrcode"></div>
+                </div>
+            </div>
+        </div>
     </div>
     <foo ter>
         <div class="row">

@@ -145,6 +145,9 @@ $(document).ready(function() {
         $("#second_page").hide();
         $("#first_page").show();
     });
+
+    // tip
+    makeTipQRCode();
 });
 
 // gets the current Week, then populates games

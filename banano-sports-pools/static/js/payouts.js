@@ -38,6 +38,9 @@ $(document).ready(function() {
             theme: $('#themeSelect').val()
         });
     });
+
+    // tip
+    makeTipQRCode();
 });
 
 // gets the current Week, then populates payouts

@@ -16,7 +16,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
 
+    <script src="static/js/tip.js"></script>
     <script src="static/js/roadmap.js"></script>
 
 </head>
@@ -90,7 +92,7 @@
                         <li>Migrated 2022 NFL pools over to new infrastructure</li>
                         <li>Added "Season" as a valid filter and PK to the database and supplemental pages</li>
                         <li>Added PAYOUT AUTOMATION (number 1 request). Payments will be sent at 12pm UTC daily</li>
-                        <li>Added Game Metadata Refresh AUTOMATION (scores, schedule changes, etc). Refreshed at 11am UTC daily</li>
+                        <li>Added Game Metadata Refresh AUTOMATION (scores, schedule changes, etc). Refreshed on the hour daily</li>
                         <li>Added Current Week Selection AUTOMATION. Current Active Week will be automatically selected when you visit the pools</li>
                         <li>Added visualizations to the leaderboards</li>
                         <li>Removed FiveThirtyEight as a data vendor since they froze their sports coverage</li>
@@ -233,14 +235,24 @@
             </div>
         </div>
         <hr style="color:lightgray; border-width: 3px;">
-        <div class="col-md-12 jumbotron text-center">
-            <h5>What the fork is BANANO?</h5>
-            <p>BANANO was forked in April 2018 from NANO. BANANO offers instant, feeless and rich in potassium 🍌 transactions, thanks to the fact that BANANO developers (several of them having being involved in NANO itself) have kept big portions of the
-                original code unchanged to keep cross-chain compatibility between existing code libraries. However, they have fined-tuned some parameters, such as Proof of Work requirements and currency units. While the focus for now is on having an ongoing
-                free and fair distribution, BANANO is also experimenting with feature additions such as a privacy layer (Camo BANANO), on-chain messaging (MonkeyTalks) and more. In context of distribution, we aim to use our meanwhile ready-to-strike infrastructure
-                with easy-to-use mobile wallets (Kalium) and tipbots on several major social media platforms to onboard normies and crypto-noobs who have no idea yet what a cryptocurrency is. We also might do IRL airdrops at some point. Of note, key here
-                is to make the start with crypto as easy as possible, use a fun attitude and gamification to get new users started without all the usual hassle, and then educate them to handle crypto in general in a responsible way.</p>
-            <a href="https://banano.cc/" target="_blank">Check out more about Banano and get a wallet address here!</a>
+        <div class="container-fluid">
+            <div class="row jumbotron">
+                <div class="col-md-10 text-center">
+                    <h5>What the fork is BANANO?</h5>
+                    <p>BANANO was forked in April 2018 from NANO. BANANO offers instant, feeless and rich in potassium 🍌 transactions, thanks to the fact that BANANO developers (several of them having being involved in NANO itself) have kept big portions of the original
+                        code unchanged to keep cross-chain compatibility between existing code libraries. However, they have fined-tuned some parameters, such as Proof of Work requirements and currency units. While the focus for now is on having an ongoing free and
+                        fair distribution, BANANO is also experimenting with feature additions such as a privacy layer (Camo BANANO), on-chain messaging (MonkeyTalks) and more. In context of distribution, we aim to use our meanwhile ready-to-strike infrastructure
+                        with easy-to-use mobile wallets (Kalium) and tipbots on several major social media platforms to onboard normies and crypto-noobs who have no idea yet what a cryptocurrency is. We also might do IRL airdrops at some point. Of note, key here
+                        is to make the start with crypto as easy as possible, use a fun attitude and gamification to get new users started without all the usual hassle, and then educate them to handle crypto in general in a responsible way.</p>
+                    <a href="https://banano.cc/" target="_blank">Check out more about Banano and get a wallet address here!</a>
+                </div>
+                <div class="col-md-2 text-center align-items-center">
+                    <div class="tip">
+                        <h5>Donations 🍌:</h5>
+                        <div id="tip_qrcode"></div>
+                    </div>
+                </div>
+            </div>
         </div>
         <footer>
             <div class="row">

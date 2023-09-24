@@ -38,4 +38,7 @@ $(document).ready(function() {
             theme: $('#themeSelect').val()
         });
     });
+
+    // tip
+    makeTipQRCode();
 });
