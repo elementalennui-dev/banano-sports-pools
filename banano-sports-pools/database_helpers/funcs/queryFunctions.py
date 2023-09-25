@@ -144,7 +144,8 @@ class QueryFunctions():
                         date as gametime,
                         date_str,
                         time,
-                        weekday
+                        weekday,
+                        status
                     from
                         {table}
                     where
