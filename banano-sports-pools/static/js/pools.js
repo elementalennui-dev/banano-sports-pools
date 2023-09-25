@@ -358,7 +358,7 @@ function getGames(sport) {
 
                 // create the dynamic game HTML (move to server side?)
                 game = `<div class="col-md-4 text-center">
-                            <p><strong>Game ID:</strong> ${x.game_id}</p>
+                            <p><strong>Game ID:</strong> ${x.game_id} (${x.status.split("_")[1]})</p>
                             <p><strong>Date:</strong> ${x.weekday}, ${x.date_str} ${x.time} (ET) | <strong>Pool Size:</strong> ${x.bet_amount} BAN</p>
                             <p><strong>${x.team2}:</strong> 1 BAN returns ${+return2.toFixed(2)} BAN | <strong>${x.team1}:</strong> 1 BAN returns ${+return1.toFixed(2)} BAN</p>
                             <div class="table-responsive">

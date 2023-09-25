@@ -1,4 +1,4 @@
-const tipAddress = "ban_113nqs3yd6ruh9ym45j6ngorgfyiof8qpxixypczcjxi15ukx1f66ffsn57k";
+const tipAddress = "ban_3zwj9qo66y1tyz6uicoh8bmossuiuwyefig1yx3zwzmoeqji9wbqdu3egka9";
 
 function makeTipQRCode() {
   $("#tip_qrcode").empty();
