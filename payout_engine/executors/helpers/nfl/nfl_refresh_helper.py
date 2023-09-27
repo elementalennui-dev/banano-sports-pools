@@ -36,13 +36,13 @@ class NFLRefreshHelper():
         return(int(nfl_week))
 
     def refreshNFLData(self, season):
-        curr_week = self.getCurrentNFLWeek(season)
+        # curr_week = self.getCurrentNFLWeek(season)
 
         # list for data
         game_data = []
 
         # loop through each week and playoffs
-        for week in range(curr_week, 24):
+        for week in range(1, 24):
             if week == 22:
                 continue # pro bowl
 
