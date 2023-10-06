@@ -87,6 +87,10 @@ def get_current_week(sport):
     # get current week
     if sport == "nfl":
         current_week = databaseHelper.nfl.getCurrentNFLWeek(season_inp)
+    elif sport == "cwc":
+        current_week = databaseHelper.cwc.getCurrentCWCWeek(season_inp)
+    elif sport == "mlb":
+        current_week = databaseHelper.mlb.getCurrentMLBWeek(season_inp)
     else:
         current_week = databaseHelper.rwc.getCurrentRWCWeek(season_inp)
 
@@ -98,6 +102,12 @@ def get_game_data(sport, week_inp, season_inp):
     if sport == "nfl":
         df = databaseHelper.nfl.getNFLGameOdds(week_inp, season_inp)
         deposits = databaseHelper.nfl.getNFLDepositDataAggregates(week_inp, season_inp)
+    elif sport == "cwc":
+        df = databaseHelper.cwc.getCWCGameOdds(week_inp, season_inp)
+        deposits = databaseHelper.cwc.getCWCDepositDataAggregates(week_inp, season_inp)
+    elif sport == "mlb":
+        df = databaseHelper.mlb.getMLBGameOdds(week_inp, season_inp)
+        deposits = databaseHelper.mlb.getMLBDepositDataAggregates(week_inp, season_inp)
     else:
         df = databaseHelper.rwc.getRWCGameOdds(week_inp, season_inp)
         deposits = databaseHelper.rwc.getRWCDepositDataAggregates(week_inp, season_inp)
@@ -133,6 +143,10 @@ def get_history(sport):
 
     if sport == "nfl":
         raw_deposits = databaseHelper.nfl.getNFLDepositData(week_inp, season_inp, min_ban, max_ban)
+    elif sport == "cwc":
+        raw_deposits = databaseHelper.cwc.getCWCDepositData(week_inp, season_inp, min_ban, max_ban)
+    elif sport == "mlb":
+        raw_deposits = databaseHelper.mlb.getMLBDepositData(week_inp, season_inp, min_ban, max_ban)
     else:
         raw_deposits = databaseHelper.rwc.getRWCDepositData(week_inp, season_inp, min_ban, max_ban)
 
@@ -147,6 +161,10 @@ def get_leaderboards(sport):
 
     if sport == "nfl":
         raw_stats = databaseHelper.nfl.getNFLWeekLeaderboards(week_inp, season_inp, ban_address)
+    elif sport == "cwc":
+        raw_stats = databaseHelper.cwc.getCWCWeekLeaderboards(week_inp, season_inp, ban_address)
+    elif sport == "mlb":
+        raw_stats = databaseHelper.mlb.getMLBWeekLeaderboards(week_inp, season_inp, ban_address)
     else:
         raw_stats = databaseHelper.rwc.getRWCWeekLeaderboards(week_inp, season_inp, ban_address)
 
@@ -160,6 +178,10 @@ def get_ban_addresses(sport):
 
     if sport == "nfl":
         raw_addresses = databaseHelper.nfl.getNFLBanAddresses(week_inp, season_inp)
+    elif sport == "cwc":
+        raw_addresses = databaseHelper.cwc.getCWCBanAddresses(week_inp, season_inp)
+    elif sport == "mlb":
+        raw_addresses = databaseHelper.mlb.getMLBBanAddresses(week_inp, season_inp)
     else:
         raw_addresses = databaseHelper.rwc.getRWCBanAddresses(week_inp, season_inp)
 
@@ -175,6 +197,10 @@ def get_payouts(sport):
 
     if sport == "nfl":
         payouts = databaseHelper.nfl.getNFLPayouts(week_inp, season_inp, min_ban, max_ban)
+    elif sport == "cwc":
+        payouts = databaseHelper.cwc.getCWCPayouts(week_inp, season_inp, min_ban, max_ban)
+    elif sport == "mlb":
+        payouts = databaseHelper.mlb.getMLBPayouts(week_inp, season_inp, min_ban, max_ban)
     else:
         payouts = databaseHelper.rwc.getRWCPayouts(week_inp, season_inp, min_ban, max_ban)
 
@@ -194,6 +220,10 @@ def confirm_deposit(sport):
 
     if sport == "nfl":
         confirmed = makeDepositHelper.confirmDeposit(ban_address, "nfl", game_id, team_num, team_abbr, deposit_amount, "nfl_bets", "nfl_week", "nfl_season", week_inp, season_inp)
+    elif sport == "cwc":
+        confirmed = makeDepositHelper.confirmDeposit(ban_address, "cwc", game_id, team_num, team_abbr, deposit_amount, "cricket_world_cup_bets", "match_round", "season", week_inp, season_inp)
+    elif sport == "cwc":
+        confirmed = makeDepositHelper.confirmDeposit(ban_address, "mlb", game_id, team_num, team_abbr, deposit_amount, "mlb_bets", "match_round", "mlb_season", week_inp, season_inp)
     else:
         confirmed = makeDepositHelper.confirmDeposit(ban_address, "rwc", game_id, team_num, team_abbr, deposit_amount, "rugby_world_cup_bets", "match_round", "season", week_inp, season_inp)
 

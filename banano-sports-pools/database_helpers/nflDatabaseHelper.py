@@ -23,7 +23,7 @@ class NFLDatabase():
                     nfl_games ng
                 where
                     ng.nfl_season = {nfl_season}
-                    and ng."date" > now();"""
+                    and ng."date" > (NOW() - INTERVAL '1 DAY');"""
 
         curr_week = list(conn.execute(query))[0][0]
         conn.close()

@@ -20,6 +20,7 @@
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <!-- Buttons -->
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
@@ -32,8 +33,8 @@
     <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
 
     <script src="../../../static/js/tip.js"></script>
-    <script src="../../../static/js/payouts.js"></script>
-    <script src="../../../static/js/rwc/rwc_payouts.js"></script>
+    <script src="../../../static/js/leaderboards.js"></script>
+    <script src="../../../static/js/mlb/mlb_leaderboards.js"></script>
 
 </head>
 
@@ -65,16 +66,16 @@
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/sports/html/rwc/rwc_pools">RWC Pools</a>
+                    <a class="nav-link" href="/sports/html/mlb/mlb_pools">MLB Pools</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/sports/html/rwc/rwc_history">RWC History</a>
+                    <a class="nav-link" href="/sports/html/mlb/mlb_history">MLB History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sports/html/mlb/mlb_payouts">MLB Payouts</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/sports/html/rwc/rwc_payouts">RWC Payouts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/sports/html/rwc/rwc_leaderboards">RWC Stats</a>
+                    <a class="nav-link" href="/sports/html/mlb/mlb_leaderboards">MLB Stats</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/roadmap">Roadmap</a>
@@ -86,8 +87,8 @@
         <div class="container-fluid jumbotron">
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <h1>Deposit Payouts</h1>
-                    <p>If you have verified your BAN address, your payouts should be highlighted below.</p>
+                    <h1>MLB Pool Stats</h1>
+                    <p>If you have verified your BAN address, your stats should be highlighted below.</p>
                 </div>
             </div>
         </div>
@@ -107,18 +108,20 @@
                             <div class="d-flex flex-column">
                                 <label class="col-form-label" for="week_inp">Match Round</label>
                                 <select id="week_inp">
-                                <option value="group" selected>Group</option>
-                            </select>
+                                    <option value="'Wildcard','Division Series','Championship Series','World Series'">All</option>
+                                    <option value="'Wildcard'" selected>Wildcard</option>
+                                    <option value="'Division Series'">Division Series</option>
+                                    <option value="'Championship Series'">Championship Series</option>
+                                    <option value="'World Series'">World Series</option>
+                              </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="d-flex flex-column">
-                                <label class="col-form-label" for="min_ban">Min. BAN</label>
-                                <input type="number" id="min_ban" name="min_ban" min="0" value="0" step="10">
-                            </div>
-                            <div class="d-flex flex-column">
-                                <label class="col-form-label" for="max_ban">Max. BAN</label>
-                                <input type="number" id="max_ban" name="max_ban" min="0" value="2000" step="10">
+                                <label class="col-form-label" for="ban_address">BAN Address</label>
+                                <select id="ban_address">
+                                    <option value="">All</option>
+                                </select>
                             </div>
                         </div>
 
@@ -137,23 +140,50 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12 table-responsive">
-                <table id="payouts_table" class="table table-hover table-bordered table-striped text-center">
+                <table id="sql_table" class="table table-hover table-bordered table-striped text-center">
                     <thead>
                         <tr>
                             <th>Match Round</th>
-                            <th>Game ID</th>
-                            <th>Ban Address</th>
-                            <th>Total Deposits</th>
-                            <th>Winning Pool</th>
-                            <th>Percent of Pool</th>
-                            <th>Losing Pool</th>
-                            <th>Amount Won</th>
-                            <th>Payout</th>
-                            <th>Block</th>
+                            <th>Address</th>
+                            <th>No. Games</th>
+                            <th>Winners</th>
+                            <th>Draws</th>
+                            <th>Win %</th>
+                            <th>Total Bet</th>
+                            <th>Payouts</th>
+                            <th>Profit</th>
+                            <th>Return %</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
+                <table id="indiv_table" class="table table-hover table-bordered table-striped text-center" style="display:none">
+                    <thead>
+                        <tr>
+                            <th>Match Round</th>
+                            <th>Address</th>
+                            <th>Game ID</th>
+                            <th>Betting Team</th>
+                            <th>Won?</th>
+                            <th>Draw?</th>
+                            <th>Total Bet</th>
+                            <th>Payouts</th>
+                            <th>Profit</th>
+                            <th>Return %</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="bar_plot"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="pie_plot"></div>
             </div>
         </div>
     </div>

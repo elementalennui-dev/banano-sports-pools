@@ -33,7 +33,7 @@
 
     <script src="../../../static/js/tip.js"></script>
     <script src="../../../static/js/payouts.js"></script>
-    <script src="../../../static/js/rwc/rwc_payouts.js"></script>
+    <script src="../../../static/js/mlb/mlb_payouts.js"></script>
 
 </head>
 
@@ -65,16 +65,16 @@
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/sports/html/rwc/rwc_pools">RWC Pools</a>
+                    <a class="nav-link" href="/sports/html/mlb/mlb_pools">MLB Pools</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/sports/html/rwc/rwc_history">RWC History</a>
+                    <a class="nav-link" href="/sports/html/mlb/mlb_history">MLB History</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="/sports/html/rwc/rwc_payouts">RWC Payouts</a>
+                    <a class="nav-link" href="/sports/html/mlb/mlb_payouts">MLB Payouts</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/sports/html/rwc/rwc_leaderboards">RWC Stats</a>
+                    <a class="nav-link" href="/sports/html/mlb/mlb_leaderboards">MLB Stats</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/roadmap">Roadmap</a>
@@ -107,8 +107,11 @@
                             <div class="d-flex flex-column">
                                 <label class="col-form-label" for="week_inp">Match Round</label>
                                 <select id="week_inp">
-                                <option value="group" selected>Group</option>
-                            </select>
+                                    <option value="Wildcard" selected>Wildcard</option>
+                                    <option value="Division Series">Division Series</option>
+                                    <option value="Championship Series">Championship Series</option>
+                                    <option value="World Series">World Series</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">

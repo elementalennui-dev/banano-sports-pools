@@ -6,7 +6,7 @@ from database_helpers.funcs.queryFunctions import QueryFunctions
 ########################### RUGBY WORLD CUP #########################################
 #########################################################################
 
-class RWCDatabase():
+class CWCDatabase():
 
     def __init__(self, engine):
         self.engine = engine
@@ -14,18 +14,18 @@ class RWCDatabase():
         self.queries = QueryFunctions()
 
     # Gets current week for dynamic pools page
-    def getCurrentRWCWeek(self, season):
+    def getCurrentCWCWeek(self, season):
         conn = self.engine.connect()
-        query =f"""
+        query = f"""
                 select
                     match_round
                 from
-                    rugby_world_cup_games rwc
+                    cricket_world_cup_games cwc
                 where
-                    rwc.season = {season}
-                    and rwc."date" > (NOW() - INTERVAL '1 DAY')
+                    cwc.season = {season}
+                    and cwc."date" > (NOW() - INTERVAL '1 DAY')
                 order by
-                    rwc."date" asc
+                    cwc."date" asc
                 limit 1;"""
 
         curr_week = list(conn.execute(query))[0][0]
@@ -34,9 +34,9 @@ class RWCDatabase():
         return(curr_week)
 
     # pool deposits
-    def getRWCDepositData(self, match_round_inp, season_inp, min_ban, max_ban):
+    def getCWCDepositData(self, match_round_inp, season_inp, min_ban, max_ban):
         conn = self.engine.connect()
-        query = self.queries.getDepositQuery(table="rugby_world_cup_bets", week_col="match_round",
+        query = self.queries.getDepositQuery(table="cricket_world_cup_bets", week_col="match_round",
                                              season_col="season", week_inp=match_round_inp,
                                              season_inp=season_inp, min_ban=min_ban, max_ban=max_ban)
         df = pd.read_sql(query, conn)
@@ -46,9 +46,9 @@ class RWCDatabase():
         return(df)
 
     # payouts page
-    def getRWCPayouts(self, match_round_inp, season_inp, min_ban, max_ban):
+    def getCWCPayouts(self, match_round_inp, season_inp, min_ban, max_ban):
         conn = self.engine.connect()
-        query = self.queries.getPayoutQuery(table="rugby_world_cup_bets_payouts", week_col="match_round",
+        query = self.queries.getPayoutQuery(table="cricket_world_cup_bets_payouts", week_col="match_round",
                                              season_col="season", week_inp=match_round_inp,
                                              season_inp=season_inp, min_ban=min_ban, max_ban=max_ban)
         df = pd.read_sql(query, conn)
@@ -57,9 +57,9 @@ class RWCDatabase():
         return(df)
 
     # helper for history page
-    def getRWCDepositDataAggregates(self, match_round_inp, season_inp):
+    def getCWCDepositDataAggregates(self, match_round_inp, season_inp):
         conn = self.engine.connect()
-        query = self.queries.getDepositAggregatesQuery(table="rugby_world_cup_bets", week_col="match_round",
+        query = self.queries.getDepositAggregatesQuery(table="cricket_world_cup_bets", week_col="match_round",
                                              season_col="season", week_inp=match_round_inp, season_inp=season_inp)
         df = pd.read_sql(query, conn)
         conn.close()
@@ -69,9 +69,9 @@ class RWCDatabase():
         return(deposits)
 
     # leaderboard page
-    def getRWCBanAddresses(self, match_round_inp, season_inp):
+    def getCWCBanAddresses(self, match_round_inp, season_inp):
         conn = self.engine.connect()
-        query = self.queries.getBANAddressesQuery(table="rugby_world_cup_bets_agg", week_col="match_round",
+        query = self.queries.getBANAddressesQuery(table="cricket_world_cup_bets_agg", week_col="match_round",
                                              season_col="season", week_inp=match_round_inp, season_inp=season_inp)
         df = pd.read_sql(query, conn)
         conn.close()
@@ -79,9 +79,9 @@ class RWCDatabase():
         return(df)
 
     # leaderboard individual
-    def getRWCWeekLeaderboards(self, match_round_inp, season_inp, ban_address):
+    def getCWCWeekLeaderboards(self, match_round_inp, season_inp, ban_address):
         conn = self.engine.connect()
-        query = self.queries.getLeaderboardsQuery(table1="rugby_world_cup_bets_agg", table2= "rugby_world_cup_bets_payouts",
+        query = self.queries.getLeaderboardsQuery(table1="cricket_world_cup_bets_agg", table2= "cricket_world_cup_bets_payouts",
                                                   week_col="match_round", season_col="season",
                                                   week_inp=match_round_inp, season_inp=season_inp)
         df = pd.read_sql(query, conn)
@@ -90,7 +90,7 @@ class RWCDatabase():
         # clean up cols
         rtn = self.func.cleanLeaderboardCols(df, ban_address=ban_address)
 
-        # clean up RWC Rounds for display
+        # clean up CWC Rounds for display
         if len(match_round_inp.split(",")) > 0:
             rtn["match_round"] = "All"
         else:
@@ -99,9 +99,9 @@ class RWCDatabase():
         return(rtn)
 
     # used to confirm deposit
-    def getRWCGameOdds(self, match_round_inp, season_inp):
+    def getCWCGameOdds(self, match_round_inp, season_inp):
         conn = self.engine.connect()
-        query = self.queries.getGameOddsQuery(table="rugby_world_cup_games", week_col="match_round",
+        query = self.queries.getGameOddsQuery(table="cricket_world_cup_games", week_col="match_round",
                                              season_col="season", week_inp=match_round_inp, season_inp=season_inp)
 
         df = pd.read_sql(query, conn)

@@ -3,6 +3,8 @@ from sqlalchemy import create_engine, inspect
 from config import POSTGRES_URL
 from database_helpers.nflDatabaseHelper import NFLDatabase
 from database_helpers.rwcDatabaseHelper import RWCDatabase
+from database_helpers.cwcDatabaseHelper import CWCDatabase
+from database_helpers.mlbDatabaseHelper import MLBDatabase
 
 class DataBaseHelper():
 
@@ -10,6 +12,8 @@ class DataBaseHelper():
         self.engine = create_engine(POSTGRES_URL)
         self.nfl = NFLDatabase(self.engine)
         self.rwc = RWCDatabase(self.engine)
+        self.cwc = CWCDatabase(self.engine)
+        self.mlb = MLBDatabase(self.engine)
 
     def writeDeposit(self, insert_df, table):
         conn = self.engine.connect()
