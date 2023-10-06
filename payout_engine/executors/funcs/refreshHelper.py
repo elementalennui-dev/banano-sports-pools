@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 import numpy as np
 import time
+from fractions import Fraction
 
 from sqlalchemy import create_engine
 from config import POSTGRES_URL
@@ -20,6 +21,12 @@ class RefreshHelper():
         else:
             ml = abs(ml)
             return (ml / (ml + 100))
+
+    def fracToMoneyline(self, frac):
+        frac = float(sum(Fraction(s) for s in frac.split()))
+        frac = frac * 100 if frac >= 1 else -100 / frac
+        frac = round(frac)
+        return(frac)
 
     # df has to have a datetime col called date
     def getWeekday(self, df):
@@ -48,6 +55,10 @@ class RefreshHelper():
             gamePk = ha["id"]
             comp_links = ha['competitions'][0]["competitors"]
 
+            # type
+            type_txt = ha['competitions'][0].get("type", {}).get("text", None)
+            type_abbr = ha['competitions'][0].get("type", {}).get("abbreviation", None)
+
             # HOME Team (team1)
             home_comp = [x for x in comp_links if x["homeAway"] == "home"][0]
             team1_url = home_comp["team"]["$ref"]
@@ -68,9 +79,9 @@ class RefreshHelper():
             try:
                 home_url = home_comp["score"]["$ref"]
                 resp = requests.get(home_url)
-                score1 = resp.json().get("value", np.nan)
+                score1 = resp.json().get("value", 0)
             except:
-                score1 = np.nan
+                score1 = 0
 
             # AWAY Team
             away_comp = [x for x in comp_links if x["homeAway"] == "away"][0]
@@ -92,9 +103,9 @@ class RefreshHelper():
             try:
                 away_url = away_comp["score"]["$ref"]
                 resp = requests.get(away_url)
-                score2 = resp.json().get("value", np.nan)
+                score2 = resp.json().get("value", 0)
             except:
-                score2 = np.nan
+                score2 = 0
 
             # odds for both are a bit sketch
             odds_url = ha['competitions'][0].get("odds", {}).get('$ref', "")
@@ -104,8 +115,18 @@ class RefreshHelper():
                 if (odds_url):
                     resp = requests.get(odds_url)
                     data2 = resp.json()
-                    away_odds = data2["items"][0]["awayTeamOdds"].get("moneyLine", 100)
-                    home_odds = data2["items"][0]["homeTeamOdds"].get("moneyLine", 100)
+
+                    # cricket has frac odds
+                    if "moneyLine" in data2["items"][0]["awayTeamOdds"].keys():
+                        away_odds = data2["items"][0]["awayTeamOdds"].get("moneyLine", 100)
+                        home_odds = data2["items"][0]["homeTeamOdds"].get("moneyLine", 100)
+                    else:
+                        away_odds = data2["items"][0]["awayTeamOdds"]["odds"].get("summary", "1/1")
+                        home_odds = data2["items"][0]["homeTeamOdds"]["odds"].get("summary", "1/1")
+
+                        # convert to moneyline
+                        away_odds = self.fracToMoneyline(away_odds)
+                        home_odds = self.fracToMoneyline(home_odds)
 
                     provider = data2["items"][0]["provider"].get("name", "")
                     details = data2["items"][0].get("details", "")
@@ -131,7 +152,13 @@ class RefreshHelper():
                     status_id = data3.get("type", {}).get("id", None)
                     if status_id:
                         status_id = int(status_id)
-                    status = data3.get("type", {}).get("name", None)
+
+                    # dumb CWC status data
+                    if "name" in data3.get("type", {}):
+                        status = data3.get("type", {}).get("name", None)
+                    else:
+                        status = data3.get("type", {}).get("shortDetail", None)
+                        status = f"STATUS_{status.upper()}"
                 else:
                     status_id = None
                     status = None
@@ -141,7 +168,7 @@ class RefreshHelper():
                 status = None
 
             # final flat data
-            row = {"date": date, "gamepk": gamePk, "team1": team1, "team2": team2, "team1_name": team1_name, "team2_name": team2_name, "team1_id": team1_id, "team2_id": team2_id, "team1_logo": team1_logo, "team2_logo": team2_logo, "odds_provider": provider, "odds_details": details, "team2_odds": away_odds, "team1_odds": home_odds, "score1": score1, "score2": score2, "status_id": status_id, "status": status}
+            row = {"date": date, "gamepk": gamePk, "game_type": type_txt, "game_type_abbr": type_abbr, "team1": team1, "team2": team2, "team1_name": team1_name, "team2_name": team2_name, "team1_id": team1_id, "team2_id": team2_id, "team1_logo": team1_logo, "team2_logo": team2_logo, "odds_provider": provider, "odds_details": details, "team2_odds": away_odds, "team1_odds": home_odds, "score1": score1, "score2": score2, "status_id": status_id, "status": status}
             rows.append(row)
 
             # sleep

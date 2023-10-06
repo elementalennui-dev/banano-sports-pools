@@ -8,7 +8,11 @@ def main():
     payouter = PayoutsExecutor()
 
     # refresh sports
-    refresher.refreshSports()
+    try:
+        refresher.refreshSports()
+    except Exception as e:
+        print("Refreshing sports failed. More info below:")
+        print(e)
 
     # receive funds
     payouter.receiveFunds()
