@@ -2,13 +2,13 @@ $(document).ready(function() {
 
     $("#filter").click(function() {
         // alert("button clicked!");
-        getLeaderboards("rwc", "match_round");
+        getLeaderboards("cwc", "match_round");
     });
 
     $("#week_inp,#season_inp").on("change", function() {
-        getBanAddresses("rwc");
+        getBanAddresses("cwc");
     });
 
     // init
-    getCurrentWeek("rwc", "match_round");
+    getCurrentWeek("cwc", "match_round");
 });

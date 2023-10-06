@@ -222,7 +222,7 @@ def confirm_deposit(sport):
         confirmed = makeDepositHelper.confirmDeposit(ban_address, "nfl", game_id, team_num, team_abbr, deposit_amount, "nfl_bets", "nfl_week", "nfl_season", week_inp, season_inp)
     elif sport == "cwc":
         confirmed = makeDepositHelper.confirmDeposit(ban_address, "cwc", game_id, team_num, team_abbr, deposit_amount, "cricket_world_cup_bets", "match_round", "season", week_inp, season_inp)
-    elif sport == "cwc":
+    elif sport == "mlb":
         confirmed = makeDepositHelper.confirmDeposit(ban_address, "mlb", game_id, team_num, team_abbr, deposit_amount, "mlb_bets", "match_round", "mlb_season", week_inp, season_inp)
     else:
         confirmed = makeDepositHelper.confirmDeposit(ban_address, "rwc", game_id, team_num, team_abbr, deposit_amount, "rugby_world_cup_bets", "match_round", "season", week_inp, season_inp)

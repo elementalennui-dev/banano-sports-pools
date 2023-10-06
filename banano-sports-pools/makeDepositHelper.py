@@ -18,6 +18,10 @@ class MakeDepositHelper():
     def confirmDeposit(self, ban_address, sport, game_id, team_num, team_abbr, deposit_amount, table, week_col, season_col, week_inp, season_inp):
         if sport == "nfl":
             data = self.databaseHelper.nfl.getNFLGameOdds(week_inp, season_inp)
+        elif sport == "mlb":
+            data = self.databaseHelper.mlb.getMLBGameOdds(week_inp, season_inp)
+        elif sport == "cwc":
+            data = self.databaseHelper.cwc.getCWCGameOdds(week_inp, season_inp)
         else:
             data = self.databaseHelper.rwc.getRWCGameOdds(week_inp, season_inp)
 
