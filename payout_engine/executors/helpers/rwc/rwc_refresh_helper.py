@@ -36,7 +36,6 @@ class RWCRefreshHelper():
             r = requests.get(f"https://sports.core.api.espn.com/v2/sports/rugby/leagues/164205/events?dates=20230908-20231028&page={page}")
             data_page = r.json()
             data.extend(data_page["items"])
-            print(page)
 
         game_data = self.refreshHelper.getGameData(data)
         return (game_data)
@@ -44,15 +43,20 @@ class RWCRefreshHelper():
     def refreshRWCData(self, season):
         # make dataframe
         df = self.getRWCData()
-        df = self.refreshHelper.getWeekday(df)
-        df["group_name"] = [self.rwc_groups[x] if x in self.rwc_groups.keys() else None for x in df.team1]
 
-        # round and season
-        df["match_round"] = None
-        df.loc[0:40, "match_round"] = "group"
-        df.loc[40:, "group_name"] = None
-        df["season"] = season
+        if len(df) > 0:
+            df = self.refreshHelper.getWeekday(df)
+            df["group_name"] = [self.rwc_groups[x] if x in self.rwc_groups.keys() else None for x in df.team1]
 
-        # write to database
-        self.refreshHelper.writeToDatabase(df, "rugby_world_cup_games", season, "season")
+            # round and season
+            df["match_round"] = "group"
+            df["season"] = season
+
+            # get gamepks
+            gamepks = ", ".join(df.gamepk.astype(str).to_list())
+
+            # write to database
+            self.refreshHelper.writeToDatabase(df, "rugby_world_cup_games", gamepks)
+        else:
+            print("No RWC Data Found to refresh..")
         return({"ok": True})

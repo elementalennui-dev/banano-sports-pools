@@ -1,6 +1,7 @@
 import pandas as pd
 import requests
-import numpy as np
+from datetime import datetime, timedelta
+import pytz
 import time
 from fractions import Fraction
 
@@ -51,8 +52,20 @@ class RefreshHelper():
             ufd = requests.get(x["$ref"])
             ha = ufd.json()
 
+            # only do current dates
+            game_date = ha["date"]
+            game_date = pd.to_datetime(game_date).tz_convert('US/Eastern')
+            now_min = datetime.now(pytz.timezone("US/Eastern")) - timedelta(days=1)
+            now_max = datetime.now(pytz.timezone("US/Eastern")) + timedelta(days=1)
+
+            # skip game if beyond date range
+            if (game_date < now_min) or (game_date > now_max):
+                time.sleep(1)
+                continue
+
             # flatten
             gamePk = ha["id"]
+            print(gamePk)
             comp_links = ha['competitions'][0]["competitors"]
 
             # type
@@ -176,25 +189,30 @@ class RefreshHelper():
 
         # make final dataframe
         df3 = pd.DataFrame(rows)
-        df3["team2_odds_wp"] = df3.team2_odds.apply(self.moneylineWinPercent)
-        df3["team1_odds_wp"] = df3.team1_odds.apply(self.moneylineWinPercent)
 
-        df3["team2_odds"] = [f"+{x}" if x > 0 else f"{x}" for x in df3.team2_odds]
-        df3["team1_odds"] = [f"+{x}" if x > 0 else f"{x}" for x in df3.team1_odds]
+        if len(df3) > 0:
+            df3["team2_odds_wp"] = df3.team2_odds.apply(self.moneylineWinPercent)
+            df3["team1_odds_wp"] = df3.team1_odds.apply(self.moneylineWinPercent)
 
-        # fun with datetime
-        df3["date"] = pd.to_datetime(df3["date"]).dt.tz_convert('US/Eastern')
-        df3['date_str'] = df3['date'].dt.strftime('%m/%d/%Y')
-        df3["time"] = df3["date"].dt.strftime("%I:%M %p").str.strip("0")
-        df3["game_id"] = df3.team2 + "_" + df3.team1 + "_" + df3.gamepk.astype(str)
+            df3["team2_odds"] = [f"+{x}" if x > 0 else f"{x}" for x in df3.team2_odds]
+            df3["team1_odds"] = [f"+{x}" if x > 0 else f"{x}" for x in df3.team1_odds]
+
+            # fun with datetime
+            df3["date"] = pd.to_datetime(df3["date"]).dt.tz_convert('US/Eastern')
+            df3['date_str'] = df3['date'].dt.strftime('%m/%d/%Y')
+            df3["time"] = df3["date"].dt.strftime("%I:%M %p").str.strip("0")
+            df3["game_id"] = df3.team2 + "_" + df3.team1 + "_" + df3.gamepk.astype(str)
 
         return(df3)
 
-    def writeToDatabase(self, df, inp_table, season, season_col):
+    def writeToDatabase(self, df, inp_table, gamepks):
         # write to database
         conn = self.engine.connect()
 
-        self.engine.execute(f"delete from {inp_table} where {season_col} = {season}")
+        query = f"delete from {inp_table} where gamepk in ({gamepks})"
+        self.engine.execute(query)
+
+        # write out
         df.to_sql(inp_table, con=conn, index=False, if_exists="append", method="multi")
 
         # close connection

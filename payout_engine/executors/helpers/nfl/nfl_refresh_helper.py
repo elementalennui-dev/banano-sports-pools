@@ -23,43 +23,37 @@ class NFLRefreshHelper():
 
     def getCurrentNFLWeek(self, nfl_season):
         # get nfl week
-        query = f"""
+        query =f"""
                 select
-                    coalesce(min(nfl_week), 23)
+                    nfl_week
                 from
                     nfl_games ng
                 where
                     ng.nfl_season = {nfl_season}
-                    and ng."date" > (NOW() - INTERVAL '1 DAY');"""
+                    and ng."date" > (NOW() - INTERVAL '1 DAY')
+                order by
+                    ng."date" asc
+                limit 1;"""
 
         nfl_week = list(self.refreshHelper.engine.execute(query))[0][0]
         return(int(nfl_week))
 
     def refreshNFLData(self, season):
-        # curr_week = self.getCurrentNFLWeek(season)
-
-        # list for data
-        game_data = []
-
-        # loop through each week and playoffs
-        for week in range(1, 24):
-            if week == 22:
-                continue # pro bowl
-
-            # else, get data
-            sub = self.getNFLData(week, season)
-            sub["nfl_week"] = week
-            sub["nfl_season"] = season
-
-            # back to records
-            rtn = sub.to_dict(orient="records")
-            game_data.extend(rtn)
-            print(week)
+        curr_week = self.getCurrentNFLWeek(season)
 
         # make dataframe
-        df = pd.DataFrame(game_data)
-        df = self.refreshHelper.getWeekday(df)
+        df = self.getNFLData(curr_week, season)
 
-        # write to database
-        self.refreshHelper.writeToDatabase(df, "nfl_games", season, "nfl_season")
+        if len(df) > 0:
+            df["nfl_week"] = curr_week
+            df["nfl_season"] = season
+            df = self.refreshHelper.getWeekday(df)
+
+            # get gamepks
+            gamepks = ", ".join(df.gamepk.astype(str).to_list())
+
+            # write to database
+            self.refreshHelper.writeToDatabase(df, "nfl_games", gamepks)
+        else:
+            print("No NFL Data Found to refresh..")
         return({"ok": True})

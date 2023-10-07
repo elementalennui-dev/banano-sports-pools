@@ -30,10 +30,17 @@ class MLBRefreshHelper():
     def refreshMLBData(self, season):
         # make dataframe
         df = self.getMLBData(season)
-        df = self.refreshHelper.getWeekday(df)
-        df["match_round"] = [self.rounds[x] if x in self.rounds.keys() else None for x in df.game_type]
-        df["mlb_season"] = season
 
-        # write to database
-        self.refreshHelper.writeToDatabase(df, "mlb_games", season, "mlb_season")
+        if len(df) > 0:
+            df = self.refreshHelper.getWeekday(df)
+            df["match_round"] = [self.rounds[x] if x in self.rounds.keys() else None for x in df.game_type]
+            df["mlb_season"] = season
+
+            # get gamepks
+            gamepks = ", ".join(df.gamepk.astype(str).to_list())
+
+            # write to database
+            self.refreshHelper.writeToDatabase(df, "mlb_games", gamepks)
+        else:
+            print("No MLB Data Found to refresh..")
         return({"ok": True})

@@ -20,20 +20,20 @@ class RefreshExecutor():
         self.nfl_season = self.now.year if self.now.month >= 3 else self.now.year - 1
 
     def refreshSports(self):
-        # # refresh RWC Data
-        # print(f"Refreshing RWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
-        # self.rwcRefreshHelper.refreshRWCData(self.season)
-        # print(f"Refreshed RWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        # refresh RWC Data
+        print(f"Refreshing RWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        self.rwcRefreshHelper.refreshRWCData(self.season)
+        print(f"Refreshed RWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
 
-        # # refresh NFL Data
-        # print(f"Refreshing NFL data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
-        # self.nflRefreshHelper.refreshNFLData(self.nfl_season)
-        # print(f"Refreshed NFL data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        # refresh NFL Data
+        print(f"Refreshing NFL data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        self.nflRefreshHelper.refreshNFLData(self.nfl_season)
+        print(f"Refreshed NFL data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
 
-        # # refresh MLB Data
-        # print(f"Refreshing MLB data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
-        # self.mlbRefreshHelper.refreshMLBData(self.season)
-        # print(f"Refreshed MLB data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        # refresh MLB Data
+        print(f"Refreshing MLB data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        self.mlbRefreshHelper.refreshMLBData(self.season)
+        print(f"Refreshed MLB data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
 
         # refresh CWC Data
         print(f"Refreshing CWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
