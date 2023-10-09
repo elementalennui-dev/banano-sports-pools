@@ -92,7 +92,7 @@ function getDepositHistory(sport, week_col) {
         contentType: 'application/json;charset=UTF-8',
         data: JSON.stringify({ "data": payload }),
         success: function(returnedData) {
-            renderTable(returnedData, week_col);
+            renderTable(returnedData, week_col, sport);
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui on Discord.");
@@ -102,7 +102,7 @@ function getDepositHistory(sport, week_col) {
 }
 
 // builds the table
-function renderTable(inp_data, week_col) {
+function renderTable(inp_data, week_col, sport) {
     // init html string
     let html = "";
 

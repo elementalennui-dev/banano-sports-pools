@@ -122,7 +122,7 @@ function getLeaderboards(sport, week_col) {
         contentType: 'application/json;charset=UTF-8',
         data: JSON.stringify({ "data": payload }),
         success: function(returnedData) {
-            renderLeaderboards(returnedData, ban_address, week_col);
+            renderLeaderboards(returnedData, ban_address, week_col, sport);
             makeLeaderboardBarPlot(returnedData, ban_address);
             makeLeaderboardPiePlot(returnedData, ban_address);
         },
@@ -134,7 +134,7 @@ function getLeaderboards(sport, week_col) {
 }
 
 // displays leaderboards
-function renderLeaderboards(inp_data, ban_address, week_col) {
+function renderLeaderboards(inp_data, ban_address, week_col, sport) {
     // init html string
     let html = "";
 
