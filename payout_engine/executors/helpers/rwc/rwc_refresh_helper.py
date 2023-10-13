@@ -46,10 +46,11 @@ class RWCRefreshHelper():
 
         if len(df) > 0:
             df = self.refreshHelper.getWeekday(df)
-            df["group_name"] = [self.rwc_groups[x] if x in self.rwc_groups.keys() else None for x in df.team1]
+            # df["group_name"] = [self.rwc_groups[x] if x in self.rwc_groups.keys() else None for x in df.team1]
 
             # round and season
-            df["match_round"] = "group"
+            df["match_round"] = "knockout"
+            df.loc[:, "group_name"] = None
             df["season"] = season
 
             # get gamepks
