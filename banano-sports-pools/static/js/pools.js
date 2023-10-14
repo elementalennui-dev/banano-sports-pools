@@ -101,7 +101,7 @@ $(document).ready(function() {
     $("#next_modal_page").on("click", function(x) {
 
         let game_id = $("#game_id_splt").text();
-        let game = game_data.filter(x => x.game_id == game_id)[0]
+        let game = game_data.filter(x => x.game_id == game_id)[0];
 
         // checks for quantity, less than 100, and before kickoff
         if (($("#quantity").val() != "") && ($("#quantity").val() != null)) {
@@ -144,6 +144,32 @@ $(document).ready(function() {
         $("#third_page").hide();
         $("#second_page").hide();
         $("#first_page").show();
+    });
+
+    // status filter
+    $("#status_inp").on("change", function (x) {
+        let status = $("#status_inp").val();
+        let hide_ids = [];
+
+        // filter out games not matching desired status
+        if (status === "Scheduled") {
+            hide_ids = game_data.filter(x => x.status !== "STATUS_SCHEDULED").map(y => y.game_id);
+        } else if (status === "Final") {
+            hide_ids = game_data.filter(x => x.status !== "STATUS_FINAL").map(y => y.game_id);
+        } else if (status === "Live") {
+            hide_ids = game_data.filter(x => (x.status === "STATUS_FINAL") | (x.status === 'STATUS_SCHEDULED')).map(y => y.game_id);
+        } else {
+            hide_ids = [];
+        }
+
+        // hide/show specific games
+        game_data.map(x => x.game_id).forEach(function (y) {
+            if (hide_ids.includes(y)) {
+                $(`#${y}`).hide();
+            } else {
+                $(`#${y}`).show();
+            }
+        });
     });
 
     // tip
@@ -357,7 +383,7 @@ function getGames(sport) {
                 if (x.team2_rec) team2_rec = "is_rec";
 
                 // create the dynamic game HTML (move to server side?)
-                game = `<div class="col-md-4 text-center">
+                game = `<div class="col-md-4 text-center" id="${x.game_id}">
                             <p><strong>Game ID:</strong> ${x.game_id} (${x.status.substring(7)})</p>
                             <p><strong>Date:</strong> ${x.weekday}, ${x.date_str} ${x.time} (ET) | <strong>Pool Size:</strong> ${x.bet_amount} BAN</p>
                             <p><strong>${x.team2}:</strong> 1 BAN returns ${+return2.toFixed(2)} BAN | <strong>${x.team1}:</strong> 1 BAN returns ${+return1.toFixed(2)} BAN</p>

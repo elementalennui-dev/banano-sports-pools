@@ -2,7 +2,8 @@
 $(document).ready(function() {
 
     // load the main page of active deposits
-    $("#week_inp, #season_inp").on("change", function(x) {
+    $("#week_inp, #season_inp").on("change", function (x) {
+        $("#status_inp").val("All");
         $("#games").hide();
         $(".progress-bar").animate({
             width: "0%",

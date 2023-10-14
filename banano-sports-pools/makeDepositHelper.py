@@ -17,12 +17,16 @@ class MakeDepositHelper():
     #########################################################################
     def confirmDeposit(self, ban_address, sport, game_id, team_num, team_abbr, deposit_amount, table, week_col, season_col, week_inp, season_inp):
         if sport == "nfl":
+            bet_table = "nfl_bets"
             data = self.databaseHelper.nfl.getNFLGameOdds(week_inp, season_inp)
         elif sport == "mlb":
+            bet_table = "mlb_bets"
             data = self.databaseHelper.mlb.getMLBGameOdds(week_inp, season_inp)
         elif sport == "cwc":
+            bet_table = "cricket_world_cup_bets"
             data = self.databaseHelper.cwc.getCWCGameOdds(week_inp, season_inp)
         else:
+            bet_table = "rugby_world_cup_bets"
             data = self.databaseHelper.rwc.getRWCGameOdds(week_inp, season_inp)
 
         game = data.loc[data.game_id == game_id]
@@ -61,7 +65,7 @@ class MakeDepositHelper():
         found_amount = df["amount"][0]
 
         # check block exists in database instead of time limit
-        block_exists = self.databaseHelper.checkBlockExists("nfl_bets", df.hash[0])
+        block_exists = self.databaseHelper.checkBlockExists(bet_table, df.hash[0])
         # print(block_exists)
         if (block_exists["ok"]) & (diff <= self.ten_minute_duration) & (deposit_amount == found_amount):
             row = {"block": df.hash[0],
