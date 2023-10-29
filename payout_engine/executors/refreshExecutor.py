@@ -1,6 +1,6 @@
 from executors.funcs.refreshHelper import RefreshHelper
 from executors.helpers.nfl.nfl_refresh_helper import NFLRefreshHelper
-from executors.helpers.rwc.rwc_refresh_helper import RWCRefreshHelper
+# from executors.helpers.rwc.rwc_refresh_helper import RWCRefreshHelper
 from executors.helpers.mlb.mlb_refresh_helper import MLBRefreshHelper
 from executors.helpers.cwc.cwc_refresh_helper import CWCRefreshHelper
 from datetime import datetime
@@ -10,7 +10,7 @@ class RefreshExecutor():
     def __init__(self):
         self.refreshHelper = RefreshHelper()
         self.nflRefreshHelper = NFLRefreshHelper(self.refreshHelper)
-        self.rwcRefreshHelper = RWCRefreshHelper(self.refreshHelper)
+        # self.rwcRefreshHelper = RWCRefreshHelper(self.refreshHelper)
         self.mlbRefreshHelper = MLBRefreshHelper(self.refreshHelper)
         self.cwcRefreshHelper = CWCRefreshHelper(self.refreshHelper)
 
@@ -21,9 +21,9 @@ class RefreshExecutor():
 
     def refreshSports(self):
         # refresh RWC Data
-        print(f"Refreshing RWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
-        self.rwcRefreshHelper.refreshRWCData(self.season)
-        print(f"Refreshed RWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        # print(f"Refreshing RWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        # self.rwcRefreshHelper.refreshRWCData(self.season)
+        # print(f"Refreshed RWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
 
         # refresh NFL Data
         print(f"Refreshing NFL data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
