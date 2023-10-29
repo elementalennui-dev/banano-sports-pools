@@ -33,7 +33,7 @@ class RWCRefreshHelper():
         # get data by date range (2 pages)
         data = []
         for page in range(1,3):
-            r = requests.get(f"https://sports.core.api.espn.com/v2/sports/rugby/leagues/164205/events?dates=20230908-20231028&page={page}")
+            r = requests.get(f"https://sports.core.api.espn.com/v2/sports/rugby/leagues/164205/events?dates=20230908-20231029&page={page}")
             data_page = r.json()
             data.extend(data_page["items"])
 
