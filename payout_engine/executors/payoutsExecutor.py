@@ -11,8 +11,8 @@ class PayoutsExecutor():
         self.payoutsHelper = PayoutsHelper()
         self.nflPayoutsHelper = NFLPayoutsHelper(self.payoutsHelper)
         # self.rwcPayoutsHelper = RWCPayoutsHelper(self.payoutsHelper)
-        self.mlbPayoutsHelper = MLBPayoutsHelper(self.payoutsHelper)
-        self.cwcPayoutsHelper = CWCPayoutsHelper(self.payoutsHelper)
+        # self.mlbPayoutsHelper = MLBPayoutsHelper(self.payoutsHelper)
+        # self.cwcPayoutsHelper = CWCPayoutsHelper(self.payoutsHelper)
 
         # dynamic season
         self.now = datetime.now(pytz.timezone("US/Eastern"))
@@ -40,15 +40,15 @@ class PayoutsExecutor():
         print(f"Paid out NFL data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
 
         # payouts for MLB Data
-        print(f"Paying out MLB data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
-        match_round = self.mlbPayoutsHelper.getCurrentMLBWeek(self.season)
-        self.mlbPayoutsHelper.sendMLBPayouts(self.season, match_round)
-        print(f"Paid out MLB data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        # print(f"Paying out MLB data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        # match_round = self.mlbPayoutsHelper.getCurrentMLBWeek(self.season)
+        # self.mlbPayoutsHelper.sendMLBPayouts(self.season, match_round)
+        # print(f"Paid out MLB data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
 
         # payouts for CWC Data
-        print(f"Paying out CWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
-        match_round = self.cwcPayoutsHelper.getCurrentCWCWeek(self.season)
-        self.cwcPayoutsHelper.sendCWCPayouts(self.season, match_round)
-        print(f"Paid out CWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        # print(f"Paying out CWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        # match_round = self.cwcPayoutsHelper.getCurrentCWCWeek(self.season)
+        # self.cwcPayoutsHelper.sendCWCPayouts(self.season, match_round)
+        # print(f"Paid out CWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
 
         return True

@@ -11,8 +11,8 @@ class RefreshExecutor():
         self.refreshHelper = RefreshHelper()
         self.nflRefreshHelper = NFLRefreshHelper(self.refreshHelper)
         # self.rwcRefreshHelper = RWCRefreshHelper(self.refreshHelper)
-        self.mlbRefreshHelper = MLBRefreshHelper(self.refreshHelper)
-        self.cwcRefreshHelper = CWCRefreshHelper(self.refreshHelper)
+        # self.mlbRefreshHelper = MLBRefreshHelper(self.refreshHelper)
+        # self.cwcRefreshHelper = CWCRefreshHelper(self.refreshHelper)
 
         # dynamic season
         self.now = datetime.now(pytz.timezone("US/Eastern"))
@@ -31,13 +31,13 @@ class RefreshExecutor():
         print(f"Refreshed NFL data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
 
         # refresh MLB Data
-        print(f"Refreshing MLB data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
-        self.mlbRefreshHelper.refreshMLBData(self.season)
-        print(f"Refreshed MLB data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        # print(f"Refreshing MLB data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        # self.mlbRefreshHelper.refreshMLBData(self.season)
+        # print(f"Refreshed MLB data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
 
         # refresh CWC Data
-        print(f"Refreshing CWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
-        self.cwcRefreshHelper.refreshCWCData(self.season)
-        print(f"Refreshed CWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        # print(f"Refreshing CWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        # self.cwcRefreshHelper.refreshCWCData(self.season)
+        # print(f"Refreshed CWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
 
         return True
