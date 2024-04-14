@@ -1,18 +1,20 @@
 from executors.funcs.payoutsHelper import PayoutsHelper
-from executors.helpers.nfl.nfl_payouts_helper import NFLPayoutsHelper
-from executors.helpers.rwc.rwc_payouts_helper import RWCPayoutsHelper
-from executors.helpers.mlb.mlb_payouts_helper import MLBPayoutsHelper
-from executors.helpers.cwc.cwc_payouts_helper import CWCPayoutsHelper
+# from executors.helpers.nfl.nfl_payouts_helper import NFLPayoutsHelper
+# from executors.helpers.rwc.rwc_payouts_helper import RWCPayoutsHelper
+# from executors.helpers.mlb.mlb_payouts_helper import MLBPayoutsHelper
+# from executors.helpers.cwc.cwc_payouts_helper import CWCPayoutsHelper
+from executors.helpers.nba.nba_payouts_helper import NBAPayoutsHelper
 from datetime import datetime
 import pytz
 
 class PayoutsExecutor():
     def __init__(self):
         self.payoutsHelper = PayoutsHelper()
-        self.nflPayoutsHelper = NFLPayoutsHelper(self.payoutsHelper)
+        # self.nflPayoutsHelper = NFLPayoutsHelper(self.payoutsHelper)
         # self.rwcPayoutsHelper = RWCPayoutsHelper(self.payoutsHelper)
         # self.mlbPayoutsHelper = MLBPayoutsHelper(self.payoutsHelper)
         # self.cwcPayoutsHelper = CWCPayoutsHelper(self.payoutsHelper)
+        self.nbaPayoutsHelper = NBAPayoutsHelper(self.payoutsHelper)
 
         # dynamic season
         self.now = datetime.now(pytz.timezone("US/Eastern"))
@@ -34,10 +36,10 @@ class PayoutsExecutor():
         # print(f"Paid out RWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
 
         # payouts for NFL Data
-        print(f"Paying out NFL data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
-        nfl_week = self.nflPayoutsHelper.getCurrentNFLWeek(self.nfl_season)
-        self.nflPayoutsHelper.sendNFLPayouts(self.nfl_season, nfl_week)
-        print(f"Paid out NFL data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        # print(f"Paying out NFL data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        # nfl_week = self.nflPayoutsHelper.getCurrentNFLWeek(self.nfl_season)
+        # self.nflPayoutsHelper.sendNFLPayouts(self.nfl_season, nfl_week)
+        # print(f"Paid out NFL data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
 
         # payouts for MLB Data
         # print(f"Paying out MLB data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
@@ -50,5 +52,11 @@ class PayoutsExecutor():
         # match_round = self.cwcPayoutsHelper.getCurrentCWCWeek(self.season)
         # self.cwcPayoutsHelper.sendCWCPayouts(self.season, match_round)
         # print(f"Paid out CWC data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+
+        # payouts for NBA Data
+        print(f"Paying out NBA data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        match_round = self.nbaPayoutsHelper.getCurrentNBAWeek(self.season)
+        self.nbaPayoutsHelper.sendNBAPayouts(self.season, match_round)
+        print(f"Paid out NBA data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
 
         return True

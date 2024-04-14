@@ -21,7 +21,7 @@ class PayoutsHelper():
         receive_more = True
         while receive_more:
             # receive and check balance
-            self.my_account.receive_all(threshold=0)
+            self.my_account.receive_all()
             bal = self.my_account.get_balance()
             print(bal)
 
