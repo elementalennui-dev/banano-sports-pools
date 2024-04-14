@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Banano Sports Pools</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/yeti/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../static/css/style.css">
+    <link rel="stylesheet" href="../../../static/css/qrcode.css">
+    <link rel="icon" type="image/ico" href="../../../static/assets/favicon.ico">
+
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+
+    <script src="../../../static/js/tip.js"></script>
+    <script src="../../../static/js/pools.js"></script>
+    <script src="../../../static/js/rwc/rwc_pools.js"></script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/"><img src="../../../static/assets/banano.png" height="50px" width="50px"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div style="display: inline-block;margin-left: 10px;">
+            <select class="form-control" id="themeSelect">
+                <option value="yeti" selected>Light</option>
+                <option value="darkly">Dark</option>
+                <option value="slate">Slate</option>
+                <option value="cyborg">Cyborg</option>
+                <option value="solar">Solar</option>
+                <option value="minty">Minty</option>
+                <option value="lumen">Lumen</option>
+                <option value="pulse">Purple</option>
+                <option value="zephyr">Breezy</option>
+                <option value="lux">Classy</option>
+                <option value="spacelab">Sleek</option>
+                <option value="sketchy">???</option>
+            </select>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarColor03">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/sports/html/rwc/rwc_pools">RWC Pools</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sports/html/rwc/rwc_history">RWC History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sports/html/rwc/rwc_payouts">RWC Payouts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sports/html/rwc/rwc_leaderboards">RWC Stats</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/roadmap">Roadmap</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container-fluid jumbotron">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>Banano Sports Pools - Rugby World Cup</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#more_info_modal">
+                    How Do The Pools Work?
+                </button>
+            </div>
+            <div class="col-md-6 text-center">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#v2_info_modal">
+                        What's new in v2.x?
+                    </button>
+            </div>
+        </div>
+        <div class="row" id="pre_verify">
+            <div class="col-md-11 text-center">
+                <input type="text" class="form-control" id="inputBanano" aria-describedby="bananohelp" placeholder="Enter Banano Address">
+                <small id="bananohelp" class="form-text text-muted">Please enter your Banano address so we know who you are.</small>
+            </div>
+            <div class="col-md-1 text-center">
+                <button type="button" id="verify" class="btn btn-primary">Verify!</button>
+            </div>
+        </div>
+        <br>
+        <div class="row" id="post_verify">
+            <div class="col-md-1 my-auto">
+                <div style="display:none" id="monkey"></div>
+            </div>
+            <div class="col-md-2 my-auto">
+                <div style="display:none" id="post_verify_ban">
+                    <h4>Playing as: <strong><span id="ban_address"></span></strong></h4>
+                </div>
+            </div>
+            <div class="col-md-1 my-auto">
+                <div style="zoom: 1.1;">
+                    <label class="col-form-label" for="season_inp">Season:</label>
+                    <div style="clear: both;"></div>
+                    <select id="season_inp">
+                        <option value="2023" selected>2023</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2 my-auto">
+                <div style="zoom: 1.1;">
+                    <label class="col-form-label" for="week_inp">RWC Round:</label>
+                    <div style="clear: both;"></div>
+                    <select id="week_inp">
+                        <option value="group" selected>Group</option>
+                        <option value="knockout">Knockout</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-1 my-auto">
+                <div style="zoom: 1.1;">
+                    <label class="col-form-label" for="status_inp">Status:</label>
+                    <div style="clear: both;"></div>
+                    <select id="status_inp">
+                        <option value="All" selected>All</option>
+                        <option value="Scheduled" >Scheduled</option>
+                        <option value="Live" >Live</option>
+                        <option value="Final" >Final</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-2 my-auto">
+                <div class="form-check" style="zoom: 1.3;">
+                    <input class="form-check-input" type="checkbox" value="" id="rec_games">
+                    <label class="form-check-label" for="rec_games"> Recommend Teams/Games?</label>
+                </div>
+            </div>
+            <div class="col-md-3 my-auto">
+                <button type="button" class="btn btn-secondary" id="changeBanAddress">Change BAN Address</button>
+                <button type="button" class="btn btn-primary" onClick="window.location.reload();">Refresh Page</button>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <p>Disclaimer: Win Probabilities for the Rugby World Cup are not provided by the data vendor used by these pools. All fixtures are defaulted to +100, 1/1, 2.000, 50% odds.</p>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Info -->
+    <div class="modal fade" id="more_info_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">How Do The Pools Work?</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>Place deposits with Banano on the teams you think will win their game! Your deposit will be placed in a pool in support of that team. If your team wins, you will receive your initial deposit back plus your percent of the
+                                    winning pool from deposits placed on the opposing team. If your team loses, well, your deposit will be split among the winners.
+                                </p>
+                                <p>For example, let's say BUF and LAR are playing each other. You deposit 10 BAN on BUF. The total amount deposited on BUF is 100 BAN. The total amount deposited on LAR is 80 BAN. Since your deposit makes up 10% of BUF's pool,
+                                    if BUF wins, you will receive your deposit (10 BAN) plus 10% of LAR's pool, or in this case, 8 BAN. In the case of a tie, all BAN will be returned. If no deposits are made on one side of the matchup, then all BAN will
+                                    be returned to their original owners. Deposits lock at the time of kickoff. You can make multiple deposits on a matchup, and even on both sides, however, a single BAN Address must be used.</p>
+                                <p>To make your deposits more fair and informed, the Vegas Odds and implied win probability for each game are provided. If you believe in these probabilities, then the percent of BAN in each team's pool should be close to these percentages. Further, if you check the box called "Recommend Teams/Games", we will recommend
+                                    games and teams whose pools are imbalanced according to the Vegas Odds.
+                                </p>
+                                <p>There currently is NO HOUSE FEE, but this might change in the future. All payouts go out hourly on the 15 UTC and are automated and transparent.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="v2_info_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">What's new in v2.x?</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>While the front end aspects of the application are minor, the entire backend and database have been rebuilt. The purpose of this was multi-faceted. As I scaled to multiple sports, I ran into problems with how the database kept track of deposits, as well as had to use multiple BAN addresses for payments. It is hoped that the new infrastructure will facilitate an easier time of scaling out to other sports and use the singular address that is already saved to many address books.</p>
+                                <p>Sure, great, but what cool stuff have you added?</p>
+                                <p>AUTOMATION. Automation everywhere.</p>
+                                <ol>
+                                    <li>PAYMENTS ARE NOW AUTOMATIC and will go out hourly on the 15. Shout-out to the <a href="https://github.com/jetstream0/bananopie", href="_target">BananoPie</a> library for helping make this lift possible.</li>
+                                    <li>Game results are also now automated! Every day on the hour, all game outcomes should be updated automatically (e.g. final scores, schedule changes, etc)</li>
+                                    <li>When you navigate to the Pools page, the current week will be selected by default, automatically!</li>
+                                    <li>I refactored the history for the NFL pools from 2022, and made NFL Season a filter on all pages.</li>
+                                    <li>I added a couple of visualization to the stats/leaderboard pages. #DataViz</li>
+                                    <li>FiveThirtyEight has been removed as a data provider after they froze their sports coverage.</li>
+                                </ol>
+                                <p>The plans in the works for v2.x include adding other sports in a scalable, sustainable way, with continued expansion for the automation of payouts and metadata refreshes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Deposits -->
+    <div class="modal fade" id="deposit_modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal_title">BAN DEPOSITS for <strong>Game ID:</strong> <span id="game_id_splt"></span> | <strong>Teams:</strong> <span id="teams_splt"></span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                                </button>
+                </div>
+                <div class="modal-body" id="first_page">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>PLEASE DO NOT CLOSE THIS POP-UP, AFTER YOU HAVE SENT BAN, WITHOUT A DEPOSIT CONFIRMATION</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4>Steps:</h4>
+                                <ul>
+                                    <li>Select the team that you think will win from dropdown</li>
+                                    <li>Specify amount of deposit... but don't specify amounts with more than 2 decimals</li>
+                                    <li>Click next to be taken to the Send BAN page</li>
+                                    <li>Once BAN has been sent, <strong>click the "Ban Sent" button</strong></li>
+                                    <li>Close modal once you've received your deposit receipt.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <hr style="color:lightgray; border-width: 3px;">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-6" style="margin-bottom: 20px;">
+                                <label for="team_deposit"><b>Select team you think will win:</b></label>
+                                <div id="team_select"></div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-6">
+                                <label for="quantity"><b>BAN Amount:</b></label>
+                                <div>
+                                    <input type="number" id="quantity" name="quantity" min="0" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-9"></div>
+                            <div class="col-md-3">
+                                <button id="next_modal_page" type="button" class="btn btn-primary">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body" id="second_page" style="display:none;">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p>PLEASE DO NOT CLOSE THIS POP-UP, AFTER YOU HAVE SENT BAN, WITHOUT CLICKING THE "BAN SENT" BUTTON AND RECEIVING A DEPOSIT CONFIRMATION</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <ul>
+                                    <li>Simply send <span id="ban_deposit"></span> BAN (exactly) from your <strong><span id="inp_wallet"></span></strong> wallet to this wallet: <strong>ban_3sprts3a8hzysquk4mcy4ct4f6izp1mxtbnybiyrriprtjrn9da9cbd859qf</strong></li>
+                                    <li>Once sent, don't forget to <strong>CLICK THE "BAN SENT" BUTTON</strong> to receive your deposit confirmation.</li>
+                                    <li>If you don't click this button, your deposit will not be tied to the pool and your BAN might be lost!</li>
+                                    <li>Please don't send amounts with more than 2 decimals and make sure there is no raw.</li>
+                                    <li>Using "Max" link in Kalium is probably not going to work well.</li>
+                                    <li>
+                                        <p id="sendBanLinks"></p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4 my-auto">
+                                <!-- <img src="static/assets/sprts_ban_address.png"> -->
+                                <div id="qrcode"></div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-3 col-sm-3 col-md-3">
+                                <button id="back_page_modal" type="button" class="btn btn-primary">Back</button>
+                            </div>
+                            <div class="col-3 col-sm-3 col-md-3"></div>
+                            <div class="col-3 col-sm-3 col-md-3">
+                                <button id="copy_address" type="button" class="btn btn-secondary">Copy Address</button>
+                            </div>
+                            <div class="col-3 col-sm-3 col-md-3">
+                                <button id="confirm_deposit" type="button" class="btn btn-primary">BAN SENT!</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body" id="third_page" style="display:none;">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12" id="deposit_confirmation">
+                                <h2>Here is your confirmed deposit, you may now close this pop-up. Feel free to screenshot this receipt for proof.</h2>
+                                <h3> Your deposit should now also be seen on the
+                                    <a href="/sports/html/rwc/rwc_history" , target="_blank">History</a> page. Refresh this page to see the updated pool.</h3>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="display:none;">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr style="color:lightgray; border-width: 3px;">
+    <div class="container-fluid" id="progress_container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3>Grabbing RWC Games and Pool Data...</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid" id="games" style="display:none">
+    </div>
+    <hr style="color:lightgray; border-width: 3px;">
+    <div class="container-fluid">
+        <div class="row jumbotron">
+            <div class="col-md-10 text-center">
+                <h5>What the fork is BANANO?</h5>
+                <p>BANANO was forked in April 2018 from NANO. BANANO offers instant, feeless and rich in potassium 🍌 transactions, thanks to the fact that BANANO developers (several of them having being involved in NANO itself) have kept big portions of the original
+                    code unchanged to keep cross-chain compatibility between existing code libraries. However, they have fined-tuned some parameters, such as Proof of Work requirements and currency units. While the focus for now is on having an ongoing free and
+                    fair distribution, BANANO is also experimenting with feature additions such as a privacy layer (Camo BANANO), on-chain messaging (MonkeyTalks) and more. In context of distribution, we aim to use our meanwhile ready-to-strike infrastructure
+                    with easy-to-use mobile wallets (Kalium) and tipbots on several major social media platforms to onboard normies and crypto-noobs who have no idea yet what a cryptocurrency is. We also might do IRL airdrops at some point. Of note, key here
+                    is to make the start with crypto as easy as possible, use a fun attitude and gamification to get new users started without all the usual hassle, and then educate them to handle crypto in general in a responsible way.</p>
+                <a href="https://banano.cc/" target="_blank">Check out more about Banano and get a wallet address here!</a>
+            </div>
+            <div class="col-md-2 text-center align-items-center">
+                <div class="tip">
+                    <h5>Donations 🍌:</h5>
+                    <div id="tip_qrcode"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <foo ter>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-3">
+                <p>Data Sourced From <a href="https://gist.github.com/nntrn/ee26cb2a0716de0947a0a4e9a157bc1c" target="_blank">ESPN's APIs</a></p>
+            </div>
+            <div class="col-md-8">
+                <p s tyle="display: inline;">Made with 🍌 by elementalennui.
+                    <ul style="list-style-type: none; display: inline;">
+                        <li style="display: inline;"><a href="https://github.com/elementalennui-dev/banano-sports-pools/tree/main" target="_blank">Github |</a></li>
+                        <li style="display: inline;"><a href="https://twitter.com/elementalennui/" target="_blank">Twitter |</a></li>
+                        <li style="display: inline;"><a href="https://www.reddit.com/user/elementalennui" target="_blank">Reddit |</a></li>
+                        <li style="display: inline;">Discord: elementalennui</li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+        </footer>
+        <br>
+</body>
+
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Banano Sports Pools</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/yeti/bootstrap.min.css">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="icon" type="image/ico" href="static/assets/favicon.ico">
+
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+
+    <script src="static/js/tip.js"></script>
+    <script src="static/js/roadmap.js"></script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="/"><img src="static/assets/banano.png" height="50px" width="50px"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div style="display: inline-block;margin-left: 10px;">
+            <select class="form-control" id="themeSelect">
+                <option value="yeti" selected>Light</option>
+                <option value="darkly">Dark</option>
+                <option value="slate">Slate</option>
+                <option value="cyborg">Cyborg</option>
+                <option value="solar">Solar</option>
+                <option value="minty">Minty</option>
+                <option value="lumen">Lumen</option>
+                <option value="pulse">Purple</option>
+                <option value="zephyr">Breezy</option>
+                <option value="lux">Classy</option>
+                <option value="spacelab">Sleek</option>
+                <option value="sketchy">???</option>
+            </select>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarColor03">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sports/html/nfl/nfl_pools">NFL Pools</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/sports/html/rwc/rwc_pools">RWC Pools</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/roadmap">Roadmap</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="my-auto">
+        <div class="container-fluid jumbotron">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1>Roadmap & Release Notes</h1>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Release Notes</h1>
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>10/14/2023, v2.4</h4>
+                    <ul>
+                        <li>Added Status Filter</li>
+                        <li>Misc bug fixes around deposit confirmations</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <h4>10/06/2023, v2.3</h4>
+                    <ul>
+                        <li>Added Cricket World Cup</li>
+                        <li>Added MLB Playoffs</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <h4>09/24/2023, v2.2</h4>
+                    <ul>
+                        <li>Added game status for when scores are refreshed during the match</li>
+                        <li>Added donations capability</li>
+                        <li>Payout Engine has been rebuilt and now sends hourly</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <h4>09/12/2023, v2.1</h4>
+                    <ul>
+                        <li>Finished refactor of the backend to add new sports more systematically</li>
+                        <li>Added Rugby World Cup fixtures to pools</li>
+                        <li>Added Rugby World Cup data refresh and payment automation</li>
+                        <li>Added Fractional and Decimal Odds representation</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>09/03/2023, v2.0</h4>
+                    <ul>
+                        <li>Removed all pools that scaled poorly and added bloat (for now)</li>
+                        <li>Refactored the entire backend and database</li>
+                        <li>Migrated 2022 NFL pools over to new infrastructure</li>
+                        <li>Added "Season" as a valid filter and PK to the database and supplemental pages</li>
+                        <li>Added PAYOUT AUTOMATION (number 1 request). Payments will be sent at 12pm UTC daily</li>
+                        <li>Added Game Metadata Refresh AUTOMATION (scores, schedule changes, etc). Refreshed on the hour daily</li>
+                        <li>Added Current Week Selection AUTOMATION. Current Active Week will be automatically selected when you visit the pools</li>
+                        <li>Added visualizations to the leaderboards</li>
+                        <li>Removed FiveThirtyEight as a data vendor since they froze their sports coverage</li>
+                        <li>Reimbursed all deposits placed into the pools since last major release</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>02/12/2023, v1.10</h4>
+                    <ul>
+                        <li>Added UEFA Championship 2022/23 Winner Pools</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>01/19/2023, v1.9</h4>
+                    <ul>
+                        <li>Added Super Bowl 2022/23 Winner Pools</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>01/02/2023, v1.8</h4>
+                    <ul>
+                        <li>Added Premier League 2022/23 Match Pools</li>
+                        <li>Refactored the NFL Pools to use the ESPN API</li>
+                        <li>Cleaned up closed pools and website organization</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>12/07/2022, v1.7</h4>
+                    <ul>
+                        <li>Added leaderboards for World Cup & NFL</li>
+                        <li>Refactored the payouts to include more metadata for aggregate stats</li>
+                        <li>Created initial scripts to help automate payout aggregation and the sending of BAN</li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>11/21/2022, v1.6</h4>
+                    <ul>
+                        <li>Added ability to filter by Group to Match pool</li>
+                        <li>Changed sort of pools so started games/closed pools are moved to the bottom </li>
+                    </ul>
+                </div>
+                <div class="col-md-12">
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>11/18/2022, v1.5</h4>
+                    <ul>
+                        <li>Added World Cup 2022 Match Pools</li>
+                        <li>Added World Cup 2022 Match Deposit History</li>
+                        <li>Fixed bug for dark mode text color on Team/Group pools</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>11/13/2022, v1.4</h4>
+                    <ul>
+                        <li>Added World Cup 2022 Team & Group Pools</li>
+                        <li>Added World Cup 2022 Team & Group Deposit History</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>10/18/2022, v1.3</h4>
+                    <ul>
+                        <li>Added MLB 2022 Playoff Game Pools</li>
+                        <li>Added MLB 2022 Playoff Game Deposit History</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>10/9/2022, v1.2</h4>
+                    <ul>
+                        <li>Added MLB 2022 World Series Team Pools</li>
+                        <li>Added MLB 2022 World Series Team Deposit History</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>10/07/2022, v1.1</h4>
+                    <ul>
+                        <li>Added countdown timer per game</li>
+                        <li>Initial mobile compatibility</li>
+                        <li>Dark mode on history/payouts pages!</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>10/06/2022, v1.0</h4>
+                    <ul>
+                        <li>Migrate to a pro hosting account with custom domain</li>
+                        <li>Incorporated Vegas Odds from ESPN/Caesar's Sportsbook for all NFL Games</li>
+                        <li>Recommender for imbalanced pools</li>
+                        <li>Raised limit to 500 BAN per deposit</li>
+                        <li>Cosmetics to the home page</li>
+                        <li>Clean up History/Payments columns</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Roadmap</h1>
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>Short-term Goals</h4>
+                    <ul>
+                        <li>Feedback Form</li>
+                        <li>Premier League Games</li>
+                        <li>NBA Games</li>
+                    </ul>
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>Mid-term Goals</h4>
+                    <ul>
+                        <li>Track mistaken deposits into wallet not saved to database</li>
+                        <li>Poll for deposit transaction instead of the push by clicking "Ban Sent" button</li>
+                    </ul>
+                    <hr style="color:lightgray; border-width: 3px;">
+                    <h4>Continual/Long-term Development</h4>
+                    <ul>
+                        <li>Update the CSS, make more mobile friendly</li>
+                        <li>Continue to add comments and documentation</li>
+                        <li>Add in extra security around the database structure</li>
+                        <li>Add in extra security around the dependent JS, Python libraries</li>
+                        <li>Add in support for additional sports - NHL, UEFA</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <hr style="color:lightgray; border-width: 3px;">
+        <div class="container-fluid">
+            <div class="row jumbotron">
+                <div class="col-md-10 text-center">
+                    <h5>What the fork is BANANO?</h5>
+                    <p>BANANO was forked in April 2018 from NANO. BANANO offers instant, feeless and rich in potassium 🍌 transactions, thanks to the fact that BANANO developers (several of them having being involved in NANO itself) have kept big portions of the original
+                        code unchanged to keep cross-chain compatibility between existing code libraries. However, they have fined-tuned some parameters, such as Proof of Work requirements and currency units. While the focus for now is on having an ongoing free and
+                        fair distribution, BANANO is also experimenting with feature additions such as a privacy layer (Camo BANANO), on-chain messaging (MonkeyTalks) and more. In context of distribution, we aim to use our meanwhile ready-to-strike infrastructure
+                        with easy-to-use mobile wallets (Kalium) and tipbots on several major social media platforms to onboard normies and crypto-noobs who have no idea yet what a cryptocurrency is. We also might do IRL airdrops at some point. Of note, key here
+                        is to make the start with crypto as easy as possible, use a fun attitude and gamification to get new users started without all the usual hassle, and then educate them to handle crypto in general in a responsible way.</p>
+                    <a href="https://banano.cc/" target="_blank">Check out more about Banano and get a wallet address here!</a>
+                </div>
+                <div class="col-md-2 text-center align-items-center">
+                    <div class="tip">
+                        <h5>Donations 🍌:</h5>
+                        <div id="tip_qrcode"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-3">
+                    <p>Data Sourced From <a href="https://gist.github.com/nntrn/ee26cb2a0716de0947a0a4e9a157bc1c" target="_blank">ESPN's APIs</a></p>
+                </div>
+                <div class="col-md-8">
+                    <p style="display: inline;">Made with 🍌 by elementalennui.
+                        <ul style="list-style-type: none; display: inline;">
+                            <li style="display: inline;"><a href="https://github.com/elementalennui-dev/banano-sports-pools/tree/main" target="_blank">Github |</a></li>
+                            <li style="display: inline;"><a href="https://twitter.com/elementalennui/" target="_blank">Twitter |</a></li>
+                            <li style="display: inline;"><a href="https://www.reddit.com/user/elementalennui" target="_blank">Reddit |</a></li>
+                            <li style="display: inline;">Discord: elementalennui</li>
+                        </ul>
+                    </p>
+                </div>
+            </div>
+        </footer>
+        <br>
+</body>
+
+</html>
