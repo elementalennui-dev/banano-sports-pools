@@ -16,19 +16,34 @@ class RWCDatabase():
     # Gets current week for dynamic pools page
     def getCurrentRWCWeek(self, season):
         conn = self.engine.connect()
-        query =f"""
-                select
-                    match_round
-                from
-                    rugby_world_cup_games rwc
-                where
-                    rwc.season = {season}
-                    and rwc."date" > (NOW() - INTERVAL '1 DAY')
-                order by
-                    rwc."date" asc
-                limit 1;"""
 
-        curr_week = list(conn.execute(query))[0][0]
+        # get max week - if doesn't exist, use final from last season
+        try:
+            query =f"""
+                    select
+                        match_round
+                    from
+                        rugby_world_cup_games rwc
+                    where
+                        rwc.season = {season}
+                        and rwc."date" > (NOW() - INTERVAL '1 DAY')
+                    order by
+                        rwc."date" asc
+                    limit 1;"""
+
+            curr_week = list(conn.execute(query))[0][0]
+        except:
+            query = f"""
+                    select
+                        match_round
+                    from
+                        rugby_world_cup_games rwc
+                    where
+                        rwc."date" = (select max("date") from rugby_world_cup_games)
+                    order by
+                        rwc."date" asc
+                    limit 1;"""
+
         conn.close()
 
         return(curr_week)

@@ -225,7 +225,7 @@ function makeQRCode() {
 
     // also populate links
     $("#sendBanLinks").empty();
-    $("#sendBanLinks").html(`Send <a target="_blank" rel="noopener" href="https://vault.banano.cc/send?to=${sprtsAddress}&amp;amount=${$("#quantity").val()}">from BananoVault</a> • OR •
+    $("#sendBanLinks").html(`Send <a target="_blank" rel="noopener" href="https://thebananostand.com/account/${ban_address_verified}">from The Banano Stand</a> • OR •
     <a href="${qrUrl}">from installed wallet</a>`)
 }
 
@@ -545,7 +545,7 @@ function countdownTimer(game_id, gametime) {
         remaining = Object.keys(parts).map(part => {
             return `${parts[part]} ${part}`;
         }).join(" ");
-        remaining += " until kickoff!"
+        remaining += " until match start!"
     }
 
     $(`#${game_id}_countdown`).text(remaining);

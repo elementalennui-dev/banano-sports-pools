@@ -3,10 +3,10 @@ from database_helpers.funcs.databaseFunctions import DatabaseFunctions
 from database_helpers.funcs.queryFunctions import QueryFunctions
 
 #########################################################################
-########################### RUGBY WORLD CUP #########################################
+########################### NHL Playoffs #########################################
 #########################################################################
 
-class CWCDatabase():
+class NHLDatabase():
 
     def __init__(self, engine):
         self.engine = engine
@@ -14,7 +14,7 @@ class CWCDatabase():
         self.queries = QueryFunctions()
 
     # Gets current week for dynamic pools page
-    def getCurrentCWCWeek(self, season):
+    def getCurrentNHLWeek(self, season):
         conn = self.engine.connect()
 
         # get max week - if doesn't exist, use final from last season
@@ -23,12 +23,12 @@ class CWCDatabase():
                     select
                         match_round
                     from
-                        cricket_world_cup_games cwc
+                        nhl_games nhl
                     where
-                        cwc.season = {season}
-                        and cwc."date" > (NOW() - INTERVAL '1 DAY')
+                        nhl.nhl_season = {season}
+                        and nhl."date" > (NOW() - INTERVAL '1 DAY')
                     order by
-                        cwc."date" asc
+                        nhl."date" asc
                     limit 1;"""
 
             curr_week = list(conn.execute(query))[0][0]
@@ -37,13 +37,12 @@ class CWCDatabase():
                     select
                         match_round
                     from
-                        cricket_world_cup_games cwc
+                        nhl_games nhl
                     where
-                        cwc."date" = (select max("date") from cricket_world_cup_games)
+                        nhl."date" = (select max("date") from nhl_games)
                     order by
-                        cwc."date" asc
+                        nhl."date" asc
                     limit 1;"""
-
             curr_week = list(conn.execute(query))[0][0]
 
         conn.close()
@@ -51,10 +50,10 @@ class CWCDatabase():
         return(curr_week)
 
     # pool deposits
-    def getCWCDepositData(self, match_round_inp, season_inp, min_ban, max_ban):
+    def getNHLDepositData(self, match_round_inp, season_inp, min_ban, max_ban):
         conn = self.engine.connect()
-        query = self.queries.getDepositQuery(table="cricket_world_cup_bets", week_col="match_round",
-                                             season_col="season", week_inp=match_round_inp,
+        query = self.queries.getDepositQuery(table="nhl_bets", week_col="match_round",
+                                             season_col="nhl_season", week_inp=match_round_inp,
                                              season_inp=season_inp, min_ban=min_ban, max_ban=max_ban)
         df = pd.read_sql(query, conn)
         df["date"] = df["date"].astype(str)
@@ -63,10 +62,10 @@ class CWCDatabase():
         return(df)
 
     # payouts page
-    def getCWCPayouts(self, match_round_inp, season_inp, min_ban, max_ban):
+    def getNHLPayouts(self, match_round_inp, season_inp, min_ban, max_ban):
         conn = self.engine.connect()
-        query = self.queries.getPayoutQuery(table="cricket_world_cup_bets_payouts", week_col="match_round",
-                                             season_col="season", week_inp=match_round_inp,
+        query = self.queries.getPayoutQuery(table="nhl_bets_payouts", week_col="match_round",
+                                             season_col="nhl_season", week_inp=match_round_inp,
                                              season_inp=season_inp, min_ban=min_ban, max_ban=max_ban)
         df = pd.read_sql(query, conn)
         conn.close()
@@ -74,10 +73,10 @@ class CWCDatabase():
         return(df)
 
     # helper for history page
-    def getCWCDepositDataAggregates(self, match_round_inp, season_inp):
+    def getNHLDepositDataAggregates(self, match_round_inp, season_inp):
         conn = self.engine.connect()
-        query = self.queries.getDepositAggregatesQuery(table="cricket_world_cup_bets", week_col="match_round",
-                                             season_col="season", week_inp=match_round_inp, season_inp=season_inp)
+        query = self.queries.getDepositAggregatesQuery(table="nhl_bets", week_col="match_round",
+                                             season_col="nhl_season", week_inp=match_round_inp, season_inp=season_inp)
         df = pd.read_sql(query, conn)
         conn.close()
 
@@ -86,20 +85,20 @@ class CWCDatabase():
         return(deposits)
 
     # leaderboard page
-    def getCWCBanAddresses(self, match_round_inp, season_inp):
+    def getNHLBanAddresses(self, match_round_inp, season_inp):
         conn = self.engine.connect()
-        query = self.queries.getBANAddressesQuery(table="cricket_world_cup_bets_agg", week_col="match_round",
-                                             season_col="season", week_inp=match_round_inp, season_inp=season_inp)
+        query = self.queries.getBANAddressesQuery(table="nhl_bets_agg", week_col="match_round",
+                                             season_col="nhl_season", week_inp=match_round_inp, season_inp=season_inp)
         df = pd.read_sql(query, conn)
         conn.close()
 
         return(df)
 
     # leaderboard individual
-    def getCWCWeekLeaderboards(self, match_round_inp, season_inp, ban_address):
+    def getNHLWeekLeaderboards(self, match_round_inp, season_inp, ban_address):
         conn = self.engine.connect()
-        query = self.queries.getLeaderboardsQuery(table1="cricket_world_cup_bets_agg", table2= "cricket_world_cup_bets_payouts",
-                                                  week_col="match_round", season_col="season",
+        query = self.queries.getLeaderboardsQuery(table1="nhl_bets_agg", table2= "nhl_bets_payouts",
+                                                  week_col="match_round", season_col="nhl_season",
                                                   week_inp=match_round_inp, season_inp=season_inp)
         df = pd.read_sql(query, conn)
         conn.close()
@@ -107,7 +106,7 @@ class CWCDatabase():
         # clean up cols
         rtn = self.func.cleanLeaderboardCols(df, ban_address=ban_address)
 
-        # clean up CWC Rounds for display
+        # clean up NHL Rounds for display
         if len(match_round_inp.split(",")) > 0:
             rtn["match_round"] = "All"
         else:
@@ -116,10 +115,10 @@ class CWCDatabase():
         return(rtn)
 
     # used to confirm deposit
-    def getCWCGameOdds(self, match_round_inp, season_inp):
+    def getNHLGameOdds(self, match_round_inp, season_inp):
         conn = self.engine.connect()
-        query = self.queries.getGameOddsQuery(table="cricket_world_cup_games", week_col="match_round",
-                                             season_col="season", week_inp=match_round_inp, season_inp=season_inp)
+        query = self.queries.getGameOddsQuery(table="nhl_games", week_col="match_round",
+                                             season_col="nhl_season", week_inp=match_round_inp, season_inp=season_inp)
 
         df = pd.read_sql(query, conn)
         conn.close()

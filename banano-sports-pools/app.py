@@ -91,6 +91,10 @@ def get_current_week(sport):
         current_week = databaseHelper.cwc.getCurrentCWCWeek(season_inp)
     elif sport == "mlb":
         current_week = databaseHelper.mlb.getCurrentMLBWeek(season_inp)
+    elif sport == "nba":
+        current_week = databaseHelper.nba.getCurrentNBAWeek(season_inp)
+    elif sport == "nhl":
+        current_week = databaseHelper.nhl.getCurrentNHLWeek(season_inp)
     else:
         current_week = databaseHelper.rwc.getCurrentRWCWeek(season_inp)
 
@@ -108,6 +112,12 @@ def get_game_data(sport, week_inp, season_inp):
     elif sport == "mlb":
         df = databaseHelper.mlb.getMLBGameOdds(week_inp, season_inp)
         deposits = databaseHelper.mlb.getMLBDepositDataAggregates(week_inp, season_inp)
+    elif sport == "nba":
+        df = databaseHelper.nba.getNBAGameOdds(week_inp, season_inp)
+        deposits = databaseHelper.nba.getNBADepositDataAggregates(week_inp, season_inp)
+    elif sport == "nhl":
+        df = databaseHelper.nhl.getNHLGameOdds(week_inp, season_inp)
+        deposits = databaseHelper.nhl.getNHLDepositDataAggregates(week_inp, season_inp)
     else:
         df = databaseHelper.rwc.getRWCGameOdds(week_inp, season_inp)
         deposits = databaseHelper.rwc.getRWCDepositDataAggregates(week_inp, season_inp)
@@ -147,6 +157,10 @@ def get_history(sport):
         raw_deposits = databaseHelper.cwc.getCWCDepositData(week_inp, season_inp, min_ban, max_ban)
     elif sport == "mlb":
         raw_deposits = databaseHelper.mlb.getMLBDepositData(week_inp, season_inp, min_ban, max_ban)
+    elif sport == "nba":
+        raw_deposits = databaseHelper.nba.getNBADepositData(week_inp, season_inp, min_ban, max_ban)
+    elif sport == "nhl":
+        raw_deposits = databaseHelper.nhl.getNHLDepositData(week_inp, season_inp, min_ban, max_ban)
     else:
         raw_deposits = databaseHelper.rwc.getRWCDepositData(week_inp, season_inp, min_ban, max_ban)
 
@@ -165,6 +179,10 @@ def get_leaderboards(sport):
         raw_stats = databaseHelper.cwc.getCWCWeekLeaderboards(week_inp, season_inp, ban_address)
     elif sport == "mlb":
         raw_stats = databaseHelper.mlb.getMLBWeekLeaderboards(week_inp, season_inp, ban_address)
+    elif sport == "nba":
+        raw_stats = databaseHelper.nba.getNBAWeekLeaderboards(week_inp, season_inp, ban_address)
+    elif sport == "nhl":
+        raw_stats = databaseHelper.nhl.getNHLWeekLeaderboards(week_inp, season_inp, ban_address)
     else:
         raw_stats = databaseHelper.rwc.getRWCWeekLeaderboards(week_inp, season_inp, ban_address)
 
@@ -182,6 +200,10 @@ def get_ban_addresses(sport):
         raw_addresses = databaseHelper.cwc.getCWCBanAddresses(week_inp, season_inp)
     elif sport == "mlb":
         raw_addresses = databaseHelper.mlb.getMLBBanAddresses(week_inp, season_inp)
+    elif sport == "nba":
+        raw_addresses = databaseHelper.nba.getNBABanAddresses(week_inp, season_inp)
+    elif sport == "nhl":
+        raw_addresses = databaseHelper.nhl.getNHLBanAddresses(week_inp, season_inp)
     else:
         raw_addresses = databaseHelper.rwc.getRWCBanAddresses(week_inp, season_inp)
 
@@ -201,6 +223,10 @@ def get_payouts(sport):
         payouts = databaseHelper.cwc.getCWCPayouts(week_inp, season_inp, min_ban, max_ban)
     elif sport == "mlb":
         payouts = databaseHelper.mlb.getMLBPayouts(week_inp, season_inp, min_ban, max_ban)
+    elif sport == "nba":
+        payouts = databaseHelper.nba.getNBAPayouts(week_inp, season_inp, min_ban, max_ban)
+    elif sport == "nhl":
+        payouts = databaseHelper.nhl.getNHLPayouts(week_inp, season_inp, min_ban, max_ban)
     else:
         payouts = databaseHelper.rwc.getRWCPayouts(week_inp, season_inp, min_ban, max_ban)
 
@@ -224,6 +250,10 @@ def confirm_deposit(sport):
         confirmed = makeDepositHelper.confirmDeposit(ban_address, "cwc", game_id, team_num, team_abbr, deposit_amount, "cricket_world_cup_bets", "match_round", "season", week_inp, season_inp)
     elif sport == "mlb":
         confirmed = makeDepositHelper.confirmDeposit(ban_address, "mlb", game_id, team_num, team_abbr, deposit_amount, "mlb_bets", "match_round", "mlb_season", week_inp, season_inp)
+    elif sport == "nba":
+        confirmed = makeDepositHelper.confirmDeposit(ban_address, "nba", game_id, team_num, team_abbr, deposit_amount, "nba_bets", "match_round", "nba_season", week_inp, season_inp)
+    elif sport == "nhl":
+        confirmed = makeDepositHelper.confirmDeposit(ban_address, "nhl", game_id, team_num, team_abbr, deposit_amount, "nhl_bets", "match_round", "nhl_season", week_inp, season_inp)
     else:
         confirmed = makeDepositHelper.confirmDeposit(ban_address, "rwc", game_id, team_num, team_abbr, deposit_amount, "rugby_world_cup_bets", "match_round", "season", week_inp, season_inp)
 

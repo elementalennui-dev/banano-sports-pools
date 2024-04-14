@@ -5,6 +5,8 @@ from database_helpers.nflDatabaseHelper import NFLDatabase
 from database_helpers.rwcDatabaseHelper import RWCDatabase
 from database_helpers.cwcDatabaseHelper import CWCDatabase
 from database_helpers.mlbDatabaseHelper import MLBDatabase
+from database_helpers.nbaDatabaseHelper import NBADatabase
+from database_helpers.nhlDatabaseHelper import NHLDatabase
 
 class DataBaseHelper():
 
@@ -14,6 +16,8 @@ class DataBaseHelper():
         self.rwc = RWCDatabase(self.engine)
         self.cwc = CWCDatabase(self.engine)
         self.mlb = MLBDatabase(self.engine)
+        self.nba = NBADatabase(self.engine)
+        self.nhl = NHLDatabase(self.engine)
 
     def writeDeposit(self, insert_df, table):
         conn = self.engine.connect()

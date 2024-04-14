@@ -16,19 +16,40 @@ class MLBDatabase():
     # Gets current week for dynamic pools page
     def getCurrentMLBWeek(self, season):
         conn = self.engine.connect()
-        query = f"""
-                select
-                    match_round
-                from
-                    mlb_games mlb
-                where
-                    mlb.mlb_season = {season}
-                    and mlb."date" > (NOW() - INTERVAL '1 DAY')
-                order by
-                    mlb."date" asc
-                limit 1;"""
 
-        curr_week = list(conn.execute(query))[0][0]
+        # get max week - if doesn't exist, use final from last season
+        try:
+            query = f"""
+                    select
+                        match_round
+                    from
+                        mlb_games mlb
+                    where
+                        mlb.mlb_season = {season}
+                        and mlb."date" > (NOW() - INTERVAL '1 DAY')
+                    order by
+                        mlb."date" asc
+                    limit 1;"""
+
+            curr_week = list(conn.execute(query))[0][0]
+        except:
+            query = f"""
+                    select
+                        match_round
+                    from
+                        mlb_games mlb
+                    where
+                        mlb."date" = (select max("date") from mlb_games)
+                    order by
+                        mlb."date" asc
+                    limit 1;"""
+
+            curr_week = list(conn.execute(query))[0][0]
+
+        conn.close()
+
+        return(curr_week)
+
         conn.close()
 
         return(curr_week)
