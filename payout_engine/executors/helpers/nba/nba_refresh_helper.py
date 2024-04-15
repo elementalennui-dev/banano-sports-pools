@@ -16,15 +16,17 @@ class NBARefreshHelper():
 
         # get data by date range
         data = []
-        base_url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/types/3/events"
-        pages = requests.get(base_url).json().get("pageCount", 1)
 
-        for page in range(1, pages + 1):
-            # playoffs
-            url = f"{base_url}?page={page}"
-            r = requests.get(url)
-            data_page = r.json()
-            data.extend(data_page["items"])
+        for game_type in [5, 3]:
+            base_url = f"https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/{season}/types/{game_type}/events"
+            pages = requests.get(base_url).json().get("pageCount", 1)
+
+            for page in range(1, pages + 1):
+                # playoffs
+                url = f"{base_url}?page={page}"
+                r = requests.get(url)
+                data_page = r.json()
+                data.extend(data_page["items"])
 
         game_data = self.refreshHelper.getGameData(data)
         return (game_data)
