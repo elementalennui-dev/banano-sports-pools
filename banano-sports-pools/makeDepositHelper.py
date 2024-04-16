@@ -24,7 +24,10 @@ class MakeDepositHelper():
             data = self.databaseHelper.mlb.getMLBGameOdds(week_inp, season_inp)
         elif sport == "nba":
             bet_table = "nba_bets"
-            data = self.databaseHelper.nba.getNBABGameOdds(week_inp, season_inp)
+            data = self.databaseHelper.nba.getNBAGameOdds(week_inp, season_inp)
+        elif sport == "nhl":
+            bet_table = "nhl_bets"
+            data = self.databaseHelper.nhl.getNHLGameOdds(week_inp, season_inp)
         elif sport == "cwc":
             bet_table = "cricket_world_cup_bets"
             data = self.databaseHelper.cwc.getCWCGameOdds(week_inp, season_inp)
