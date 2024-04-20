@@ -18,22 +18,22 @@ class MakeDepositHelper():
     def confirmDeposit(self, ban_address, sport, game_id, team_num, team_abbr, deposit_amount, table, week_col, season_col, week_inp, season_inp):
         if sport == "nfl":
             bet_table = "nfl_bets"
-            data = self.databaseHelper.nfl.getNFLGameOdds(week_inp, season_inp)
+            data = self.databaseHelper.nfl.getNFLGameOdds(week_inp, season_inp, team_inp='All')
         elif sport == "mlb":
             bet_table = "mlb_bets"
-            data = self.databaseHelper.mlb.getMLBGameOdds(week_inp, season_inp)
+            data = self.databaseHelper.mlb.getMLBGameOdds(week_inp, season_inp, team_inp='All')
         elif sport == "nba":
             bet_table = "nba_bets"
-            data = self.databaseHelper.nba.getNBAGameOdds(week_inp, season_inp)
+            data = self.databaseHelper.nba.getNBAGameOdds(week_inp, season_inp, team_inp='All')
         elif sport == "nhl":
             bet_table = "nhl_bets"
-            data = self.databaseHelper.nhl.getNHLGameOdds(week_inp, season_inp)
+            data = self.databaseHelper.nhl.getNHLGameOdds(week_inp, season_inp, team_inp='All')
         elif sport == "cwc":
             bet_table = "cricket_world_cup_bets"
-            data = self.databaseHelper.cwc.getCWCGameOdds(week_inp, season_inp)
+            data = self.databaseHelper.cwc.getCWCGameOdds(week_inp, season_inp, team_inp='All')
         else:
             bet_table = "rugby_world_cup_bets"
-            data = self.databaseHelper.rwc.getRWCGameOdds(week_inp, season_inp)
+            data = self.databaseHelper.rwc.getRWCGameOdds(week_inp, season_inp, team_inp='All')
 
         game = data.loc[data.game_id == game_id]
         game_time = game.reset_index().gametime[0]
