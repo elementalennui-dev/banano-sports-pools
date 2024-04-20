@@ -44,7 +44,7 @@ class RefreshHelper():
         return (df)
 
     # this works for all sports
-    def getGameData(self, data):
+    def getGameData(self, data, time_min = 1, time_max = 365):
         # get data for each game
         rows = []
         for x in data:
@@ -55,8 +55,8 @@ class RefreshHelper():
             # only do current dates
             game_date = ha["date"]
             game_date = pd.to_datetime(game_date).tz_convert('US/Eastern')
-            now_min = datetime.now(pytz.timezone("US/Eastern")) - timedelta(days=7)
-            now_max = datetime.now(pytz.timezone("US/Eastern")) + timedelta(days=7)
+            now_min = datetime.now(pytz.timezone("US/Eastern")) - timedelta(days=time_min)
+            now_max = datetime.now(pytz.timezone("US/Eastern")) + timedelta(days=time_max)
 
             # skip game if beyond date range
             if (game_date < now_min) or (game_date > now_max):

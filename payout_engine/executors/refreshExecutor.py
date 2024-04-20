@@ -4,6 +4,7 @@ from executors.funcs.refreshHelper import RefreshHelper
 # from executors.helpers.mlb.mlb_refresh_helper import MLBRefreshHelper
 # from executors.helpers.cwc.cwc_refresh_helper import CWCRefreshHelper
 from executors.helpers.nba.nba_refresh_helper import NBARefreshHelper
+from executors.helpers.nhl.nhl_refresh_helper import NHLRefreshHelper
 from datetime import datetime
 import pytz
 
@@ -15,6 +16,7 @@ class RefreshExecutor():
         # self.mlbRefreshHelper = MLBRefreshHelper(self.refreshHelper)
         # self.cwcRefreshHelper = CWCRefreshHelper(self.refreshHelper)
         self.nbaRefreshHelper = NBARefreshHelper(self.refreshHelper)
+        self.nhlRefreshHelper = NHLRefreshHelper(self.refreshHelper)
 
         # dynamic season
         self.now = datetime.now(pytz.timezone("US/Eastern"))
@@ -46,5 +48,10 @@ class RefreshExecutor():
         print(f"Refreshing NBA data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
         self.nbaRefreshHelper.refreshNBAData(self.season)
         print(f"Refreshed NBA data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+
+        # refresh NHL Data
+        print(f"Refreshing NHL data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
+        self.nhlRefreshHelper.refreshNHLData(self.season)
+        print(f"Refreshed NHL data at {datetime.now(pytz.timezone('US/Eastern')).isoformat()}")
 
         return True

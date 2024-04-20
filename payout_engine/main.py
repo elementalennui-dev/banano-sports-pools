@@ -1,6 +1,9 @@
 from executors.refreshExecutor import RefreshExecutor
 from executors.payoutsExecutor import PayoutsExecutor
 
+import warnings
+warnings.filterwarnings('ignore')
+
 def main():
 
     # executors

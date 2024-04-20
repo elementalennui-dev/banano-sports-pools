@@ -26,7 +26,7 @@ class NHLRefreshHelper():
             data_page = r.json()
             data.extend(data_page["items"])
 
-        game_data = self.refreshHelper.getGameData(data)
+        game_data = self.refreshHelper.getGameData(data, time_max=7)
         return (game_data)
 
     def refreshNHLData(self, season):
