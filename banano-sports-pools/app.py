@@ -100,26 +100,31 @@ def get_current_week(sport):
 
     return(jsonify({"current_week": current_week}))
 
-@app.route("/sports/api/get_game_data/<sport>/<week_inp>/<season_inp>", methods=["GET"])
-def get_game_data(sport, week_inp, season_inp):
+@app.route("/sports/api/get_game_data/<sport>", methods=["POST"])
+def get_game_data(sport):
+    content = request.json["data"]
+    season_inp = int(content["season_inp"])
+    week_inp = content["week_inp"]
+    team_inp = content["team_inp"]
+
     # get data for sport
     if sport == "nfl":
-        df = databaseHelper.nfl.getNFLGameOdds(week_inp, season_inp)
+        df = databaseHelper.nfl.getNFLGameOdds(week_inp, season_inp, team_inp)
         deposits = databaseHelper.nfl.getNFLDepositDataAggregates(week_inp, season_inp)
     elif sport == "cwc":
-        df = databaseHelper.cwc.getCWCGameOdds(week_inp, season_inp)
+        df = databaseHelper.cwc.getCWCGameOdds(week_inp, season_inp, team_inp)
         deposits = databaseHelper.cwc.getCWCDepositDataAggregates(week_inp, season_inp)
     elif sport == "mlb":
-        df = databaseHelper.mlb.getMLBGameOdds(week_inp, season_inp)
+        df = databaseHelper.mlb.getMLBGameOdds(week_inp, season_inp, team_inp)
         deposits = databaseHelper.mlb.getMLBDepositDataAggregates(week_inp, season_inp)
     elif sport == "nba":
-        df = databaseHelper.nba.getNBAGameOdds(week_inp, season_inp)
+        df = databaseHelper.nba.getNBAGameOdds(week_inp, season_inp, team_inp)
         deposits = databaseHelper.nba.getNBADepositDataAggregates(week_inp, season_inp)
     elif sport == "nhl":
-        df = databaseHelper.nhl.getNHLGameOdds(week_inp, season_inp)
+        df = databaseHelper.nhl.getNHLGameOdds(week_inp, season_inp, team_inp)
         deposits = databaseHelper.nhl.getNHLDepositDataAggregates(week_inp, season_inp)
     else:
-        df = databaseHelper.rwc.getRWCGameOdds(week_inp, season_inp)
+        df = databaseHelper.rwc.getRWCGameOdds(week_inp, season_inp, team_inp)
         deposits = databaseHelper.rwc.getRWCDepositDataAggregates(week_inp, season_inp)
 
     # merge deposits
@@ -140,6 +145,28 @@ def get_game_data(sport, week_inp, season_inp):
     df1 = df.loc[df.started].reset_index(drop=True)
     df2 = df.loc[~df.started].reset_index(drop=True)
     df = df2.append(df1)
+
+    return(jsonify(json.loads(df.to_json(orient="records"))))
+
+@app.route("/sports/api/get_teams/<sport>", methods=["POST"])
+def get_teams(sport):
+    content = request.json["data"]
+    season_inp = int(content["season_inp"])
+    week_inp = content["week_inp"]
+
+    # get data for sport
+    if sport == "nfl":
+        df = databaseHelper.nfl.getNFLTeams(week_inp, season_inp)
+    elif sport == "cwc":
+        df = databaseHelper.cwc.getCWCTeams(week_inp, season_inp)
+    elif sport == "mlb":
+        df = databaseHelper.mlb.getMLBTeams(week_inp, season_inp)
+    elif sport == "nba":
+        df = databaseHelper.nba.getNBATeams(week_inp, season_inp)
+    elif sport == "nhl":
+        df = databaseHelper.nhl.getNHLTeams(week_inp, season_inp)
+    else:
+        df = databaseHelper.rwc.getRWCTeams(week_inp, season_inp)
 
     return(jsonify(json.loads(df.to_json(orient="records"))))
 

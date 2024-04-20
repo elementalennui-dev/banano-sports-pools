@@ -13,7 +13,7 @@ class NHLPayoutsHelper():
                     nhl_games nhl
                 where
                     nhl.nhl_season = {nhl_season}
-                    and nhl."date" > (NOW() - INTERVAL '1 DAY')
+                    and nhl."date" > (NOW() - '12 HOURS')
                 order by
                     nhl."date" asc
                 limit 1;"""

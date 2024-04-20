@@ -39,6 +39,35 @@ class QueryFunctions():
                 """
         return(query)
 
+    def getTeamsQuery(self, table, week_col, season_col, week_inp, season_inp):
+        query = f"""
+                select distinct
+                    *
+                from
+                    (
+                        select
+                            team1_name as team_name
+                        from
+                            {table}
+                        where
+                            {week_col} = '{week_inp}'
+                            and {season_col} = {season_inp}
+
+                        union all
+
+                        select
+                            team2_name as team_name
+                        from
+                            {table}
+                        where
+                            {week_col} = '{week_inp}'
+                            and {season_col} = {season_inp}
+                        ) as x
+                    order by
+                        x.team_name asc;
+                """
+        return(query)
+
     def getPayoutQuery(self, table, week_col, season_col, week_inp, season_inp, min_ban, max_ban):
         query = f"""
                     SELECT
@@ -121,7 +150,13 @@ class QueryFunctions():
             """
         return(query)
 
-    def getGameOddsQuery(self, table, week_col, season_col, week_inp, season_inp):
+    def getGameOddsQuery(self, table, week_col, season_col, week_inp, season_inp, team_inp):
+        # check team
+        if team_inp == 'All':
+            team_clause = "1=1"
+        else:
+            team_clause = f"(team1_name = '{team_inp}' OR team2_name = '{team_inp}')"
+
         query = f"""SELECT
                         {season_col},
                         {week_col},
@@ -150,5 +185,6 @@ class QueryFunctions():
                         {table}
                     where
                         {week_col} = '{week_inp}'
-                        and {season_col} = {season_inp};"""
+                        and {season_col} = {season_inp}
+                        and {team_clause};"""
         return(query)

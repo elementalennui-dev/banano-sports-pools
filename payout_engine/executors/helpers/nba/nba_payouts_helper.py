@@ -13,7 +13,7 @@ class NBAPayoutsHelper():
                     nba_games nba
                 where
                     nba.nba_season = {nba_season}
-                    and nba."date" > (NOW() - INTERVAL '1 DAY')
+                    and nba."date" > (NOW() - INTERVAL '12 HOURS')
                 order by
                     nba."date" asc
                 limit 1;"""

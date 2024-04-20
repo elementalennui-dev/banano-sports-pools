@@ -114,14 +114,23 @@ class RWCDatabase():
         return(rtn)
 
     # used to confirm deposit
-    def getRWCGameOdds(self, match_round_inp, season_inp):
+    def getRWCGameOdds(self, match_round_inp, season_inp, team_inp):
         conn = self.engine.connect()
         query = self.queries.getGameOddsQuery(table="rugby_world_cup_games", week_col="match_round",
-                                             season_col="season", week_inp=match_round_inp, season_inp=season_inp)
+                                             season_col="season", week_inp=match_round_inp,
+                                             season_inp=season_inp, team_inp=team_inp)
 
         df = pd.read_sql(query, conn)
         conn.close()
 
         # cleans up datetimes, disabled, etc
         df = self.func.cleanGameOdds(df)
+        return(df)
+
+    def getRWCTeams(self, match_round_inp, season_inp):
+        conn = self.engine.connect()
+        query = self.queries.getTeamsQuery(table="rugby_world_cup_games", week_col="match_round",
+                                             season_col="season", week_inp=match_round_inp, season_inp=season_inp)
+        df = pd.read_sql(query, conn)
+        conn.close()
         return(df)

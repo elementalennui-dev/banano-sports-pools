@@ -96,7 +96,7 @@ class PayoutsHelper():
         blocks = []
 
         # use bananopie to send the transaction
-        for indx, row in transactions.iterrows():
+        for _, row in transactions.iterrows():
             payout = "{:.2f}".format(row["payout"])
             print(row["ban_address"], payout)
 
