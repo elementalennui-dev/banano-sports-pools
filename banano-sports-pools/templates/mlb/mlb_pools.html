@@ -130,15 +130,18 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-1 my-auto">
+            <div class="col-md-2 my-auto">
                 <div style="zoom: 1.1;">
                     <label class="col-form-label" for="status_inp">Status:</label>
-                    <div style="clear: both;"></div>
                     <select id="status_inp">
                         <option value="All" selected>All</option>
                         <option value="Scheduled" >Scheduled</option>
                         <option value="Live" >Live</option>
                         <option value="Final" >Final</option>
+                    </select>
+                    <label class="col-form-label" for="team_inp">Teams:</label>
+                    <select id="team_inp">
+                        <option value="All" selected>All</option>
                     </select>
                 </div>
             </div>
@@ -148,7 +151,7 @@
                     <label class="form-check-label" for="rec_games"> Recommend Teams/Games?</label>
                 </div>
             </div>
-            <div class="col-md-3 my-auto">
+            <div class="col-md-2 my-auto">
                 <button type="button" class="btn btn-secondary" id="changeBanAddress">Change BAN Address</button>
                 <button type="button" class="btn btn-primary" onClick="window.location.reload();">Refresh Page</button>
             </div>
@@ -178,6 +181,7 @@
                                     games and teams whose pools are imbalanced according to the Vegas Odds.
                                 </p>
                                 <p>There currently is NO HOUSE FEE, but this might change in the future. All payouts go out hourly on the 15 UTC and are automated and transparent.</p>
+                                <p>More information can be found in this <a href="https://www.daily-peel.com/post/banano-sports-pools" _target="blank">Daily Peel article</a> and this <a href="https://www.daily-peel.com/post/booster-3-winners-announcement" _target="blank">Booster Winners Announcement</a>.</p>
                             </div>
                         </div>
                     </div>
@@ -208,7 +212,6 @@
                                     <li>PAYMENTS ARE NOW AUTOMATIC and will go out hourly on the 15. Shout-out to the <a href="https://github.com/jetstream0/bananopie", href="_target">BananoPie</a> library for helping make this lift possible.</li>
                                     <li>Game results are also now automated! Every day on the hour, all game outcomes should be updated automatically (e.g. final scores, schedule changes, etc)</li>
                                     <li>When you navigate to the Pools page, the current week will be selected by default, automatically!</li>
-                                    <li>I refactored the history for the NFL pools from 2022, and made NFL Season a filter on all pages.</li>
                                     <li>I added a couple of visualization to the stats/leaderboard pages. #DataViz</li>
                                     <li>FiveThirtyEight has been removed as a data provider after they froze their sports coverage.</li>
                                 </ol>

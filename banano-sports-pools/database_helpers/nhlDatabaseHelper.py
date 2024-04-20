@@ -26,7 +26,7 @@ class NHLDatabase():
                         nhl_games nhl
                     where
                         nhl.nhl_season = {season}
-                        and nhl."date" > (NOW() - INTERVAL '1 DAY')
+                        and nhl."date" > (NOW() - '12 HOURS')
                     order by
                         nhl."date" asc
                     limit 1;"""
@@ -115,14 +115,22 @@ class NHLDatabase():
         return(rtn)
 
     # used to confirm deposit
-    def getNHLGameOdds(self, match_round_inp, season_inp):
+    def getNHLGameOdds(self, match_round_inp, season_inp, team_inp):
         conn = self.engine.connect()
         query = self.queries.getGameOddsQuery(table="nhl_games", week_col="match_round",
-                                             season_col="nhl_season", week_inp=match_round_inp, season_inp=season_inp)
-
+                                             season_col="nhl_season", week_inp=match_round_inp,
+                                             season_inp=season_inp, team_inp=team_inp)
         df = pd.read_sql(query, conn)
         conn.close()
 
         # cleans up datetimes, disabled, etc
         df = self.func.cleanGameOdds(df)
+        return(df)
+
+    def getNHLTeams(self, match_round_inp, season_inp):
+        conn = self.engine.connect()
+        query = self.queries.getTeamsQuery(table="nhl_games", week_col="match_round",
+                                             season_col="nhl_season", week_inp=match_round_inp, season_inp=season_inp)
+        df = pd.read_sql(query, conn)
+        conn.close()
         return(df)

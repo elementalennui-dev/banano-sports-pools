@@ -120,14 +120,23 @@ class MLBDatabase():
         return(rtn)
 
     # used to confirm deposit
-    def getMLBGameOdds(self, match_round_inp, season_inp):
+    def getMLBGameOdds(self, match_round_inp, season_inp, team_inp):
         conn = self.engine.connect()
         query = self.queries.getGameOddsQuery(table="mlb_games", week_col="match_round",
-                                             season_col="mlb_season", week_inp=match_round_inp, season_inp=season_inp)
+                                             season_col="mlb_season", week_inp=match_round_inp,
+                                             season_inp=season_inp, team_inp=team_inp)
 
         df = pd.read_sql(query, conn)
         conn.close()
 
         # cleans up datetimes, disabled, etc
         df = self.func.cleanGameOdds(df)
+        return(df)
+
+    def getMLBTeams(self, match_round_inp, season_inp):
+        conn = self.engine.connect()
+        query = self.queries.getTeamsQuery(table="mlb_games", week_col="match_round",
+                                             season_col="mlb_season", week_inp=match_round_inp, season_inp=season_inp)
+        df = pd.read_sql(query, conn)
+        conn.close()
         return(df)

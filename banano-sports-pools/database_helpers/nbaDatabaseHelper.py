@@ -26,7 +26,7 @@ class NBADatabase():
                         nba_games nba
                     where
                         nba.nba_season = {season}
-                        and nba."date" > (NOW() - INTERVAL '1 DAY')
+                        and nba."date" > (NOW() - INTERVAL '12 HOURS')
                     order by
                         nba."date" asc
                     limit 1;"""
@@ -115,14 +115,23 @@ class NBADatabase():
         return(rtn)
 
     # used to confirm deposit
-    def getNBAGameOdds(self, match_round_inp, season_inp):
+    def getNBAGameOdds(self, match_round_inp, season_inp, team_inp):
         conn = self.engine.connect()
         query = self.queries.getGameOddsQuery(table="nba_games", week_col="match_round",
-                                             season_col="nba_season", week_inp=match_round_inp, season_inp=season_inp)
+                                             season_col="nba_season", week_inp=match_round_inp,
+                                             season_inp=season_inp, team_inp=team_inp)
 
         df = pd.read_sql(query, conn)
         conn.close()
 
         # cleans up datetimes, disabled, etc
         df = self.func.cleanGameOdds(df)
+        return(df)
+
+    def getNBATeams(self, match_round_inp, season_inp):
+        conn = self.engine.connect()
+        query = self.queries.getTeamsQuery(table="nba_games", week_col="match_round",
+                                             season_col="nba_season", week_inp=match_round_inp, season_inp=season_inp)
+        df = pd.read_sql(query, conn)
+        conn.close()
         return(df)

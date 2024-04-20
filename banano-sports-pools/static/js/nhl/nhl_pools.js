@@ -2,7 +2,16 @@
 $(document).ready(function() {
 
     // load the main page of active deposits
-    $("#week_inp, #season_inp").on("change", function (x) {
+    $("#week_inp, #season_inp, #team_inp").on("change", function (x) {
+        let triggeredById = x.target.id;
+
+        // trigger check
+        if (triggeredById === 'week_inp' || triggeredById === 'season_inp') {
+            // Logic for when week_inp or season_inp triggers the event
+            $("#team_inp").val("All");
+            getTeams("nhl");
+        }
+
         $("#status_inp").val("All");
         $("#games").hide();
         $(".progress-bar").animate({

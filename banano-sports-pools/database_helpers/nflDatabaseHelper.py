@@ -100,14 +100,23 @@ class NFLDatabase():
         return(rtn)
 
     # used to confirm deposit
-    def getNFLGameOdds(self, nfl_week_inp, nfl_season_inp):
+    def getNFLGameOdds(self, nfl_week_inp, nfl_season_inp, team_inp):
         conn = self.engine.connect()
         query = self.queries.getGameOddsQuery(table="nfl_games", week_col="nfl_week",
-                                             season_col="nfl_season", week_inp=nfl_week_inp, season_inp=nfl_season_inp)
+                                             season_col="nfl_season", week_inp=nfl_week_inp,
+                                             season_inp=nfl_season_inp, team_inp=team_inp)
 
         df = pd.read_sql(query, conn)
         conn.close()
 
         # cleans up datetimes, disabled, etc
         df = self.func.cleanGameOdds(df)
+        return(df)
+
+    def getNFLTeams(self, nfl_week_inp, nfl_season_inp):
+        conn = self.engine.connect()
+        query = self.queries.getTeamsQuery(table="nfl_games", week_col="nfl_week",
+                                             season_col="nfl_season", week_inp=nfl_week_inp, season_inp=nfl_season_inp)
+        df = pd.read_sql(query, conn)
+        conn.close()
         return(df)

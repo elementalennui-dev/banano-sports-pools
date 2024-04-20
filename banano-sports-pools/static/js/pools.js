@@ -193,7 +193,46 @@ function getCurrentWeek(sport) {
             // get games for current week
             let current_week = returnedData["current_week"];
             $("#week_inp").val(current_week);
+            getTeams(sport);
             getGames(sport);
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui on Discord.");
+        }
+    });
+}
+
+function getTeams(sport) {
+    let season_inp = $("#season_inp").val();
+    let week_inp = $("#week_inp").val();
+    let payload = {
+        "season_inp": season_inp,
+        "week_inp": week_inp
+    };
+
+    $.ajax({
+        type: "POST",
+        url: `/sports/api/get_teams/${sport}`,
+        contentType: 'application/json;charset=UTF-8',
+        data: JSON.stringify({ "data": payload }),
+        success: function (returnedData) {
+
+            // reset team
+            $('#team_inp').empty();
+            $('#team_inp').append($('<option>', {
+                value: 'All',
+                text: 'All'
+            }));
+            $("#team_inp").val('All');
+
+            // Loop through the teams array
+            $.each(returnedData, function(index, team) {
+                // Append each team name to the dropdown
+                $('#team_inp').append($('<option>', {
+                    value: team.team_name,
+                    text: team.team_name
+                }));
+            });
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             alert("Something unexpected occurred and we were unable to process your request! Please submit a bug request to elementalennui on Discord.");
@@ -323,10 +362,18 @@ function getGames(sport) {
 
     let week_inp = $("#week_inp").val();
     let season_inp = $("#season_inp").val();
+    let team_inp = $("#team_inp").val();
+
+    let payload = {
+        "season_inp": season_inp,
+        "week_inp": week_inp,
+        "team_inp": team_inp
+    };
 
     $.ajax({
-        type: "GET",
-        url: `/sports/api/get_game_data/${sport}/${week_inp}/${season_inp}`,
+        type: "POST",
+        url: `/sports/api/get_game_data/${sport}`,
+        data: JSON.stringify({ "data": payload }),
         contentType: "application/json; charset=utf-8",
         success: function(data) {
             // console.log(data);
