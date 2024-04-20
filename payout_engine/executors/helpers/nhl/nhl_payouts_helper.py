@@ -15,7 +15,7 @@ class NHLPayoutsHelper():
                     nhl.nhl_season = {nhl_season}
                     and nhl."date" > (NOW() - '12 HOURS')
                 order by
-                    nhl."date" desc
+                    nhl."date" asc
                 limit 1;"""
 
         match_round = list(self.payoutsHelper.engine.execute(query))[0][0]
