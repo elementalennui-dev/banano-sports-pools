@@ -190,13 +190,17 @@ class RefreshHelper():
 
     # Write processed game data to the database
     def writeToDatabase(self, df, inp_table, gamepks):
-        url_str = str(self.engine.url)
 
         with self.engine.connect() as conn:
 
             # Delete existing rows for specific gamepks in the target table
-            query = f"DELETE FROM {inp_table} WHERE gamepk IN ({gamepks})"
-            conn.execute(text(query))
+            formatted_gamepks = ",".join(item.strip() for item in gamepks.split(','))
+            query = f"DELETE FROM {inp_table} WHERE gamepk IN ({formatted_gamepks})"
+            print(query)
+            # Execute the query
+            result = conn.execute(text(query))
+            conn.commit()
+            print(f"Deleted {result.rowcount} rows from {inp_table}")
 
             # Write the new data to the database
             df.to_sql(name=inp_table, con=self.engine, schema="public", index=False, if_exists="append", method="multi")
