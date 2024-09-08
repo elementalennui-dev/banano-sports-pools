@@ -43,7 +43,7 @@ class NFLRefreshHelper():
         return(int(nfl_week))
 
     def refreshNFLData(self, season):
-        curr_week = 1
+        curr_week = self.getCurrentNFLWeek(season)
 
         # make dataframe
         df = self.getNFLData(curr_week, season)
