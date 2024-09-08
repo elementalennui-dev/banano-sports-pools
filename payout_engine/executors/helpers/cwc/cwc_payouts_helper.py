@@ -1,4 +1,5 @@
 import pandas as pd
+from sqlalchemy import text
 
 class CWCPayoutsHelper():
     def __init__(self, payoutsHelper):
@@ -18,7 +19,10 @@ class CWCPayoutsHelper():
                     cwc."date" asc
                 limit 1;"""
 
-        match_round = list(self.payoutsHelper.engine.execute(query))[0][0]
+        with self.payoutsHelper.engine.connect() as conn:
+            result = conn.execute(text(query))
+            match_round = list(result)[0][0]
+
         match_round = f"'{match_round}'"
         return(match_round)
 

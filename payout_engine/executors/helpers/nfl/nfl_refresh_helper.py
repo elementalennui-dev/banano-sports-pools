@@ -1,5 +1,6 @@
 import pandas as pd
 import requests
+from sqlalchemy import text
 
 class NFLRefreshHelper():
     def __init__(self, refreshHelper):
@@ -35,7 +36,10 @@ class NFLRefreshHelper():
                     ng."date" asc
                 limit 1;"""
 
-        nfl_week = list(self.refreshHelper.engine.execute(query))[0][0]
+        with self.refreshHelper.engine.connect() as conn:
+            result = conn.execute(text(query))
+            nfl_week = list(result)[0][0]
+
         return(int(nfl_week))
 
     def refreshNFLData(self, season):

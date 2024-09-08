@@ -1,6 +1,7 @@
 import pandas as pd
 from database_helpers.funcs.databaseFunctions import DatabaseFunctions
 from database_helpers.funcs.queryFunctions import QueryFunctions
+from sqlalchemy import text
 
 #########################################################################
 ########################### RUGBY WORLD CUP #########################################
@@ -31,7 +32,7 @@ class CWCDatabase():
                         cwc."date" asc
                     limit 1;"""
 
-            curr_week = list(conn.execute(query))[0][0]
+            curr_week = list(conn.execute(text(query)))[0][0]
         except:
             query = f"""
                     select
@@ -44,7 +45,7 @@ class CWCDatabase():
                         cwc."date" asc
                     limit 1;"""
 
-            curr_week = list(conn.execute(query))[0][0]
+            curr_week = list(conn.execute(text(query)))[0][0]
 
         conn.close()
 

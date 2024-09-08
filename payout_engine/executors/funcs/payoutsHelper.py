@@ -3,7 +3,7 @@ from datetime import datetime
 import pytz
 import time
 from bananopie import RPC, Wallet
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from config import POSTGRES_URL, SEED
 
 class PayoutsHelper():

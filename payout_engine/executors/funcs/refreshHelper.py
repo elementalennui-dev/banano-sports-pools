@@ -5,7 +5,7 @@ import pytz
 import time
 from fractions import Fraction
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from config import POSTGRES_URL
 
 class RefreshHelper():
@@ -49,7 +49,7 @@ class RefreshHelper():
         return df
 
     # Fetch and process game data from an external API within a given date range
-    def getGameData(self, data, time_min=1, time_max=365):
+    def getGameData(self, data, time_min=365, time_max=365):
         rows = []  # List to store rows of game data
 
         for game in data:
@@ -190,12 +190,14 @@ class RefreshHelper():
 
     # Write processed game data to the database
     def writeToDatabase(self, df, inp_table, gamepks):
-        conn = self.engine.connect()
+        url_str = str(self.engine.url)
 
-        # Delete existing rows for specific gamepks in the target table
-        query = f"DELETE FROM {inp_table} WHERE gamepk IN ({','.join(map(str, gamepks))})"
-        conn.execute(query)
+        with self.engine.connect() as conn:
 
-        # Write the new data to the database
-        df.to_sql(inp_table, conn, index=False, if_exists="append", method="multi")
-        conn.close()
+            # Delete existing rows for specific gamepks in the target table
+            query = f"DELETE FROM {inp_table} WHERE gamepk IN ({gamepks})"
+            conn.execute(text(query))
+
+            # Write the new data to the database
+            df.to_sql(name=inp_table, con=self.engine, schema="public", index=False, if_exists="append", method="multi")
+            print(f"Wrote {len(df)} rows to {inp_table}")
