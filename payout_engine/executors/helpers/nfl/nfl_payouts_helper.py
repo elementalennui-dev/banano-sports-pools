@@ -1,4 +1,5 @@
 import pandas as pd
+from sqlalchemy import text
 
 class NFLPayoutsHelper():
     def __init__(self, payoutsHelper):
@@ -15,7 +16,10 @@ class NFLPayoutsHelper():
                     ng.nfl_season = {nfl_season}
                     and ng."date" > (NOW() - INTERVAL '1 DAY');"""
 
-        nfl_week = list(self.payoutsHelper.engine.execute(query))[0][0]
+        with self.payoutsHelper.engine.connect() as conn:
+            result = conn.execute(text(query))
+            nfl_week = list(result)[0][0]
+
         return(nfl_week)
 
     def sendNFLPayouts(self, nfl_season, nfl_week):

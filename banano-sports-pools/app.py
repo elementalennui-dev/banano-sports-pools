@@ -144,7 +144,7 @@ def get_game_data(sport):
     # rearrange so started games are at the bottom
     df1 = df.loc[df.started].reset_index(drop=True)
     df2 = df.loc[~df.started].reset_index(drop=True)
-    df = df2.append(df1)
+    df = pd.concat([df2, df1], ignore_index=True)
 
     return(jsonify(json.loads(df.to_json(orient="records"))))
 
